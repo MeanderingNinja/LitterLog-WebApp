@@ -1,0 +1,78 @@
+<!-- https://getbootstrap.com/docs/5.2/examples/jumbotron/  -->
+
+<div class="p-5 mb-4 bg-light rounded-3">
+    <div class="container-fluid py-3">
+        <img src="images/Atty-profile-image.jpg" class="img-thumbnail" alt="Atty Profile Image" width="100"
+            height="100">
+        <span class="fs-4 fw-bold text-dark">Atticus</span>
+        <p class="col-md-12 fs-5 text-muted pt-3">
+            Your pet Atticus' average bathroom bahavior data is shown in the two graphs
+            below.
+        </p>
+        <!-- Use grid system for the two buttons -->
+        <div class="row">
+            <div class="col-md-6">
+                <button class="btn btn-primary btn-lg bg-success text-white border-light"><span class="fs-6">Everything
+                        looks
+                        great!</span></button>
+            </div>
+            <div class="col-md-6">
+                <button class="btn btn-primary btn-lg bg-warning text-dark border-light"><span class="fs-6">We've
+                        detected an
+                        anormaly!</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row align-items-md-stretch mb-3">
+    <div class="col-md-6">
+        <div class="h-100 p-3 text-bg-light rounded-3">
+            <h5 class="text-center">Visits</h5>
+            <p class="text-center">3 times (All Time Avg.)</p>
+            <div class="d-flex justify-content-between pb-3">
+                <div class="btn-group" role="group">
+                    <button class="btn btn-outline-primary active" data-bs-toggle="button" aria-pressed="true"
+                        type="button">
+                        <a href="#daily_visits" class="text-decoration-none" width="100%"
+                            onclick="dc.loadDailyVisitGraph();">Day</a>
+                    </button>
+                    <button class="btn btn-outline-primary " data-bs-toggle="button" type="button">
+                        <a href="#weekly_visits" class="text-decoration-none"
+                            onclick="dc.loadWeeklyVisitGraph();">Week</a>
+                    </button>
+                    <button class="btn btn-outline-primary" data-bs-toggle="button" type="button">
+                        <a href="#monthly_visits" class="text-decoration-none"
+                            onclick="dc.loadMonthlyVisitGraph();">Month</a>
+                    </button>
+                </div>
+            </div>
+            <!-- IMPORTANT: INSERT A GRAPH TO HTML PAGE -->
+            <div id="visit-graph" class="container">
+                <!-- 20221107: the graph here should be dependent on our data-->
+                <!-- <img class="p-4" src="images/sample-line-graph.png" alt="" width="100%"> -->
+                <!-- Updated with real graph crated on metabase -->
+                <!-- <iframe src="http://192.168.1.157/public/question/29d65c83-daae-4da9-9f26-f6c2ad45513f" frameborder="0"
+                    width="100%" height="600" allowtransparency></iframe> -->
+            </div>
+
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="h-100 p-3 text-bg-dark border rounded-3">
+            <h5 class="text-center">Average Time Span</h5>
+            <p class="text-center">132 secs (All Time Avg.)</p>
+            <div class="d-flex justify-content-between">
+                <button class="btn btn-outline-light" type="button">Day</button>
+                <button class="btn btn-outline-light" type="button">Week</button>
+                <button class="btn btn-outline-light" type="button">Month</button>
+            </div>
+            <div id="TimeSpan-graph" class="container">
+                <!-- 20221107: the graph here should be dependent on our data-->
+                <img class="p-4" src="images/sample-bar-graph.jpg" alt="" width="100%">
+            </div>
+
+        </div>
+    </div>
+</div>
