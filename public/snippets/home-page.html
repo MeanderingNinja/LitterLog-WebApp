@@ -30,33 +30,33 @@
     <div class="col-md-6">
         <div class="h-100 p-3 text-bg-light rounded-3">
             <h5 class="text-center">Visits</h5>
-            <p class="text-center">3 times (All Time Avg.)</p>
+            <p class="text-center">
+                <!-- Some sort of dynamic loading of numbers depending on the data  -->
+                <!-- 20221130: This number depends on the cat_data in the postgres database -->
+                <!-- 20221130: Backend comes in here? How to integrate-->
+                <!-- 20230106: maybe its a form. Something like <form action="/blabla" method="GET"> -->
+                <scan id="num_of_visit">{{num_of_visit}}</scan>
+                times (All Time Avg.)
+            </p>
             <div class="d-flex justify-content-between pb-3">
-                <div class="btn-group" role="group">
-                    <button class="btn btn-outline-primary active" data-bs-toggle="button" aria-pressed="true"
-                        type="button">
-                        <a href="#daily_visits" class="text-decoration-none" width="100%"
-                            onclick="dc.loadDailyVisitGraph();">Day</a>
-                    </button>
-                    <button class="btn btn-outline-primary " data-bs-toggle="button" type="button">
-                        <a href="#weekly_visits" class="text-decoration-none"
-                            onclick="dc.loadWeeklyVisitGraph();">Week</a>
-                    </button>
-                    <button class="btn btn-outline-primary" data-bs-toggle="button" type="button">
-                        <a href="#monthly_visits" class="text-decoration-none"
-                            onclick="dc.loadMonthlyVisitGraph();">Month</a>
-                    </button>
-                </div>
-            </div>
-            <!-- IMPORTANT: INSERT A GRAPH TO HTML PAGE -->
-            <div id="visit-graph" class="container">
-                <!-- 20221107: the graph here should be dependent on our data-->
-                <!-- <img class="p-4" src="images/sample-line-graph.png" alt="" width="100%"> -->
-                <!-- Updated with real graph crated on metabase -->
-                <!-- <iframe src="http://192.168.1.157/public/question/29d65c83-daae-4da9-9f26-f6c2ad45513f" frameborder="0"
-                    width="100%" height="600" allowtransparency></iframe> -->
+                <!-- Radio toggle buttons https://getbootstrap.com/docs/5.2/forms/checks-radios/ -->
+                <input type="radio" class="btn-check" name="options-outlined" id="day" autocomplete="off" checked>
+                <label class="btn btn-outline-primary" for="day" onclick="catData.loadDailyVisitGraph();">Day</label>
+
+                <input type="radio" class="btn-check" name="options-outlined" id="week" autocomplete="off">
+                <label class="btn btn-outline-primary" for="week" onclick="catData.loadWeeklyVisitGraph();">Week</label>
+
+                <input type="radio" class="btn-check" name="options-outlined" id="month" autocomplete="off">
+                <label class="btn btn-outline-primary" for="month"
+                    onclick="catData.loadMonthlyVisitGraph();">Month</label>
             </div>
 
+            <div id="visit-graph" class="container">
+                <!-- Update dymanically with real graph created on metabase -->
+                <!-- 20230112: The following is the default daily graph. Radio buttons for week and month can be clicked for weekly and monthly graph-->
+                <iframe src="http://192.168.1.157/public/question/29d65c83-daae-4da9-9f26-f6c2ad45513f" frameborder="0"
+                    width="100%" height="600" allowtransparency></iframe>
+            </div>
         </div>
     </div>
     <div class="col-md-6">

@@ -6,8 +6,9 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cat Tech Front End</title>
-    <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/styles.css">
+
 </head>
 
 <body>
@@ -17,7 +18,7 @@
         <nav id="header-nav" class="navbar navbar-expand-lg navbar-dark bg-dark">
             <!-- container changes its width based on the width of the browser -->
             <div class="container">
-                <!--------------- navbar.brand defines the logo, project name ------------->
+                <!--------------- .navbar-brand defines the logo, project name ------------->
                 <a class="navbar-brand d-flex align-items-center" href="index.html">
                     <!-- Logo image -->
                     <!-- .flex-fill works on sibling elements to add space between them -->
@@ -37,6 +38,8 @@
                 <div id="collapsable-nav" class="collapse navbar-collapse justify-content-end">
                     <div id="nav-list">
                         <ul class="navbar-nav">
+                            <!-- 20221130: Home and About Link doesn't direct to anywhere now -->
+                            <!-- Edit this in the future -->
                             <li class="nav-item">
                                 <a href="#" class="nav-link" id="navHomeButton">Home</a>
                             </li>
@@ -58,7 +61,7 @@
 
 
     <!------------------------------------------------ Footer ------------------------------------------------------>
-    <footer class="text-center" style="background-color: #f1f1f1;">
+    <footer class="text-center" style="background-color: rgba(0, 0, 0, 0.2);">
         <div class="container pt-4">
             <!-- margin-bottom: 4 -->
             <!-- <section class="mb-4">
@@ -68,7 +71,7 @@
             <a class="navbar-brand d-flex align-items-center" href="index.html">
                 <!-- .flex-fill works on sibling elements to add space between them -->
                 <img id="logo-img-sm" class="d-none d-md-block" src="images/logo-img-small.jpg" width="50" height="50">
-                <scan id="contact-me" class="fw-bold fst-italic text-muted ps-3 text-">
+                <scan id="contact-me" class="fw-bold fst-italic text-muted ps-3">
                     Contact me at: emma.lijing0723@gmail.com
 
                 </scan>
@@ -76,15 +79,16 @@
         </div>
 
         <!-- Copyright -->
-        <div class="text-center text-dark p-3" style="background-color: rgba(0, 0, 0, 0.2);">
+        <div class="text-center text-dark p-3">
             © 2022 Copyright:
             <a class="text-dark" href="https://mdbootstrap.com/">meanderingtech.com</a>
         </div>
         <!-- Copyright -->
     </footer>
 
-    <script src="node_modules/bootstrap/dist/js/bootstrap.bundle.js"></script>
+    <script src="js/bootstrap.bundle.js"></script>
     <script src="js/jquery-2.1.4.min.js"></script>
+    <!-- 20230111: Tried to move the following two files in the js directory, it didn't load the page properly. -->
     <script src="ajax-utils.js"></script>
     <script src="script.js"></script>
 </body>

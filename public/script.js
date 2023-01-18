@@ -1,84 +1,93 @@
-//****** Fixing Mobile Nav Menu Automatic Collapse (Lecture59)******
-
-// editing.....
-// document.addEventListener("DOMContentLoaded", function () {
-//     // document.querySelector("#navbarToggle").addEventListener("blur", function(){...});
-//     ("#navbarToggle").blur(function () {
-//         // Gets the width of the content area of the browser window
-//         let screenWidth = window.innerWidth;
-//         // xs screen size
-//         if (screenWidth < 768) {
-//             //collapse function is from bootstrap, but is a plugin to jquery
-//             ("#collapsable-nav").collapse("hide");
-//         };
-//     });
-// })
-
-//**************Dynamically loading home view content **********
-
 //Helper function for inserting innerHTML identified by 'selector' 
 const insertHtml = function (selector, html) {
     let targetElem = document.querySelector(selector);
+    //innerHTML: sets the HTML markup contained within the element.
     targetElem.innerHTML = html;
 };
 
-//show loading icon inside element identified by 'selector' 
+// Helper Function to substitude property that has 
+// double curly brackets with a value
+const insertProperty = function (string, propName, propValue) {
+    // string would be the whole category-snippet as a string
+    let propToReplace = "{{" + propName + "}}";
+    // Using RegExp() constructor with the flag "g" as an argument 
+    //of the method replace() will replace all the matches
+    string = string.replace(new RegExp(propToReplace, "g"), propValue);
+    return string;
+};
+
+//Helpfer function to show loading icon inside element identified by 'selector' 
 const showLoading = function (selector) {
     let html = "<div class='text-center'>";
     html += "<img src='images/ajax-loader.gif'></div>";
     insertHtml(selector, html);
 };
 
+//*****************Dynamically loading home page content *****************
+
 // homeHtml to be inserted to #main-content 
 let homeHtml = "snippets/home-page.html";
 let daily_visit_graph_html = "snippets/daily_visit_graph.html";
+// 20230111: url that can be used to fetch the number of visits
+let retrieveAvgDailyVisitsScript = "/api/v1/retrieveAvgDailyVisits";
 
 // On page load (before images or CSS)
-// Using jquery $(function(){}) sign should still work? YES!
+//20230111: document is [object HTMLDocument]
 document.addEventListener("DOMContentLoaded", function () {
     // On first load, show ajax-loader gif
     showLoading("#main-content");
-    //sendGetRequest takes 3 arguments: requestUrl, responseHandler, isJsonResponse 
-    ajaxUtils.sendGetRequest(
-        homeHtml,
-        // value of responseText is <request.responseText>
-        // obtained by executing sendGetRequest() function
-        function (responseText) {
-            // reponse handler
-            insertHtml("#main-content", responseText)
+
+    // 20230111: Replace the place holder for num_of_visit first, then load home page
+    //sendGetRequest takes 3 arguments: requestUrl, responseHandler, isJsonResponse
+    // insertProperty function's first param should be the content of a html file. We can use ajaxUtils.sendGetRequest() for that. 
+    ajaxUtils.sendGetRequest(retrieveAvgDailyVisitsScript,
+        // res_numOfVisit is the number returned by the above url
+        function (res_numOfVisit) {
+            ajaxUtils.sendGetRequest(homeHtml, function (response_homeHtml) {
+                // 20230111: insertProperty returns a new version of responseText (string) which has {{num_of_visit}} replaced
+                insertHtml("#main-content", insertProperty(response_homeHtml, "num_of_visit", res_numOfVisit))
+            }, false)
         },
-        false
-    );
-    ajaxUtils.sendGetRequest(daily_visit_graph_html,
-        function (responseText) { insertHtml("#visit-graph", responseText) }, false);
+
+        false);
 });
 
 // Dynamically load daily visit graph
-let dc = {};
-// Function to load the daily visit graph
-dc.loadDailyVisitGraph = function () {
+let catData = {};
+
+//20230112: Write a wrapper function that will contain the following loadDailyVisitGraph function 
+// and another function that will display daily/weekly/monthly bathroom frequency. 
+// to do 20230113 
+
+// Function to load the daily visit graph upon being clicked
+catData.loadDailyVisitGraph = function () {
     showLoading("#visit-graph");
     ajaxUtils.sendGetRequest(daily_visit_graph_html,
         function (responseText) { insertHtml("#visit-graph", responseText) }, false);
+
 };
 
-// Dynamically load weekly visit graph
+// Dynamically load weekly visit graph 
 let weekly_visit_graph_html = "snippets/weekly_visit_graph.html";
-// Function to load the daily visit graph
-dc.loadWeeklyVisitGraph = function () {
+// Function to load the daily visit graph upon being clicked
+catData.loadWeeklyVisitGraph = function () {
     showLoading("#visit-graph");
     ajaxUtils.sendGetRequest(weekly_visit_graph_html,
         function (responseText) { insertHtml("#visit-graph", responseText) }, false);
 };
 
-// Dynamically load monthly visit graph
+// Dynamically load monthly visit graph 
 let monthly_visit_graph_html = "snippets/monthly_visit_graph.html";
-// Function to load the daily visit graph
-dc.loadMonthlyVisitGraph = function () {
+// Function to load the daily visit graph upon being clicked
+catData.loadMonthlyVisitGraph = function () {
     showLoading("#visit-graph");
     ajaxUtils.sendGetRequest(monthly_visit_graph_html,
         function (responseText) { insertHtml("#visit-graph", responseText) }, false);
 };
+
+
+
+
 
 // // ******** Dynamically load Menu Categories ************
 // let dc = {};

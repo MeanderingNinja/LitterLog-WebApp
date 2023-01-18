@@ -17,7 +17,7 @@ body {
 } */
 
 #logo-img {
-  background: url('images/logo-img-medium.jpg') no-repeat;
+  background: url('../images/logo-img-medium.jpg') no-repeat;
   width: 100px;
   height: 100px;
   margin: 5px 5px 5px 0;
@@ -70,7 +70,7 @@ body {
 /***************************************** XX Large devices only **************************************/
 @media (min-width:1400px) {
   #logo-img {
-    background: url('images/logo-img.jpg') no-repeat;
+    background: url('../images/logo-img.jpg') no-repeat;
     width: 150px;
     height: 150px;
     margin: 5px 5px 5px 0;
@@ -89,7 +89,7 @@ body {
 /***************************************** X Large devices only **************************************/
 @media (min-width:1200px) and (max-width:1399) {
   #logo-img {
-    background: url('images/logo-img.jpg') no-repeat;
+    background: url('../images/logo-img.jpg') no-repeat;
     width: 150px;
     height: 150px;
     margin: 5px 5px 5px 0;
@@ -104,7 +104,7 @@ body {
 /***************************************** Large devices only **************************************/
 @media (min-width:992px) and (max-width:1199) {
   #logo-img {
-    background: url('images/logo-img.jpg') no-repeat;
+    background: url('../images/logo-img.jpg') no-repeat;
     width: 150px;
     height: 150px;
     margin: 5px 5px 5px 0;
@@ -120,7 +120,7 @@ body {
   /* HEADER */
 
   #logo-img {
-    background: url('images/logo-img-medium.jpg') no-repeat;
+    background: url('../images/logo-img-medium.jpg') no-repeat;
     width: 100px;
     height: 100px;
     margin: 5px 5px 5px 0;
