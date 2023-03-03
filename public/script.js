@@ -1,12 +1,12 @@
-//Helper function for inserting innerHTML identified by 'selector' 
+// ***********************Helper function for inserting innerHTML identified by 'selector' ***************************
+// Helper Function #1
 const insertHtml = function (selector, html) {
     let targetElem = document.querySelector(selector);
     //innerHTML: sets the HTML markup contained within the element.
     targetElem.innerHTML = html;
 };
 
-// Helper Function to substitude property that has 
-// double curly brackets with a value
+// Helper Function #2: Substitude property that has double curly brackets with a value
 const insertProperty = function (string, propName, propValue) {
     // string would be the whole category-snippet as a string
     let propToReplace = "{{" + propName + "}}";
@@ -16,74 +16,131 @@ const insertProperty = function (string, propName, propValue) {
     return string;
 };
 
-//Helpfer function to show loading icon inside element identified by 'selector' 
+// Helpfer function #3: Show loading icon inside element identified by 'selector' 
 const showLoading = function (selector) {
     let html = "<div class='text-center'>";
     html += "<img src='images/ajax-loader.gif'></div>";
     insertHtml(selector, html);
 };
 
-//*****************Dynamically loading home page content *****************
+
+
+//*********************** Dynamically loading home page content *****************
 
 // homeHtml to be inserted to #main-content 
 let homeHtml = "snippets/home-page.html";
-let daily_visit_graph_html = "snippets/daily_visit_graph.html";
 // 20230111: url that can be used to fetch the number of visits
-let retrieveAvgDailyVisitsScript = "/api/v1/retrieveAvgDailyVisits";
-
+let retrieveAvgDailyVisits = "/api/v1/retrieveAvgDailyVisits";
+ 
 // On page load (before images or CSS)
-//20230111: document is [object HTMLDocument]
 document.addEventListener("DOMContentLoaded", function () {
-    // On first load, show ajax-loader gif
     showLoading("#main-content");
-
-    // 20230111: Replace the place holder for num_of_visit first, then load home page
+    // 20230302: insert home-page.html snippet 
     //sendGetRequest takes 3 arguments: requestUrl, responseHandler, isJsonResponse
-    // insertProperty function's first param should be the content of a html file. We can use ajaxUtils.sendGetRequest() for that. 
-    ajaxUtils.sendGetRequest(retrieveAvgDailyVisitsScript,
-        // res_numOfVisit is the number returned by the above url
-        function (res_numOfVisit) {
-            ajaxUtils.sendGetRequest(homeHtml, function (response_homeHtml) {
-                // 20230111: insertProperty returns a new version of responseText (string) which has {{num_of_visit}} replaced
-                insertHtml("#main-content", insertProperty(response_homeHtml, "num_of_visit", res_numOfVisit))
-            }, false)
-        },
-
+    ajaxUtils.sendGetRequest(
+        homeHtml, 
+        function (response_homeHtml) {insertHtml("#main-content", response_homeHtml)}, 
+        false)
+    // Get the avg num of daily visits and insert it to #avg-num-of-visits in home-page.html (upon first load)
+    ajaxUtils.sendGetRequest(
+        retrieveAvgDailyVisits,
+        function (responseText) { insertHtml("#avg-num-of-visits", responseText)}, 
         false);
+
 });
 
-// Dynamically load daily visit graph
+// ************************** Dynamically load visit graphs and avg number of visits above the Day/Week/Month buttons *******************
+// **************** Functions below are call back functions for click events set up in home-page.html *************** 
 let catData = {};
+ 
+let daily_visit_graph_html = "snippets/daily_visit_graph.html";
 
-//20230112: Write a wrapper function that will contain the following loadDailyVisitGraph function 
-// and another function that will display daily/weekly/monthly bathroom frequency. 
-// to do 20230113 
-
-// Function to load the daily visit graph upon being clicked
-catData.loadDailyVisitGraph = function () {
+// **** Function #1: Load the daily visit graph and the avg number if daily visits ****
+catData.loadDailyVisits = function () {
     showLoading("#visit-graph");
+    // Insert the graph showing number of visits on a DAILY basis 
     ajaxUtils.sendGetRequest(daily_visit_graph_html,
         function (responseText) { insertHtml("#visit-graph", responseText) }, false);
+    // Get the avg num of dailyly visits and insert it to #avg-num-of-visits in home-page.html
+    ajaxUtils.sendGetRequest(retrieveAvgDailyVisits,
+        function (responseText) { insertHtml("#avg-num-of-visits", responseText) }, false);
 
 };
 
-// Dynamically load weekly visit graph 
+
+
 let weekly_visit_graph_html = "snippets/weekly_visit_graph.html";
-// Function to load the daily visit graph upon being clicked
-catData.loadWeeklyVisitGraph = function () {
+// 20230111: url that can be used to fetch the avg number of weekly visits
+let retrieveAvgWeeklyVisits = "/api/v1/retrieveAvgWeeklyVisits";
+
+// **** Function #2: Load the daily visit graph and avg visits per week ****
+catData.loadWeeklyVisits = function () {
     showLoading("#visit-graph");
+    // Insert the graph showing number of visits on a WEEKLY basis 
     ajaxUtils.sendGetRequest(weekly_visit_graph_html,
         function (responseText) { insertHtml("#visit-graph", responseText) }, false);
+    // Get the avg num of weekly visits and insert it to #avg-num-of-visits in home-page.html
+    ajaxUtils.sendGetRequest(retrieveAvgWeeklyVisits,
+        function (responseText) { insertHtml("#avg-num-of-visits", responseText) }, false);
 };
 
-// Dynamically load monthly visit graph 
+
+
 let monthly_visit_graph_html = "snippets/monthly_visit_graph.html";
-// Function to load the daily visit graph upon being clicked
-catData.loadMonthlyVisitGraph = function () {
+// 20230111: url that can be used to fetch the avg number of monthly visits
+let retrieveAvgMonthlyVisits = "/api/v1/retrieveAvgMonthlyVisits";
+
+// **** Function #3: Load the monthly visit graph and avg visits per month ****
+catData.loadMonthlyVisits = function () {
     showLoading("#visit-graph");
     ajaxUtils.sendGetRequest(monthly_visit_graph_html,
         function (responseText) { insertHtml("#visit-graph", responseText) }, false);
+    // Get the avg visits per month and insert it to #avg-num-of-visits in home-page.html
+    ajaxUtils.sendGetRequest(retrieveAvgMonthlyVisits,
+        function (responseText) { insertHtml("#avg-num-of-visits", responseText) }, false);
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Dynamically load average number of daily visits 
+// Old method of getting the avg number of visits above the graphs 
+// The home-page.html had this line: <scan id="num_of_visit">{{num_of_visit}}</scan>
+// Ditched on 20230301
+
+// catData.loadAvgDailyVisits = function(){
+//     ajaxUtils.sendGetRequest(
+//         retrieveAvgDailyVisits,
+//         // res_numOfVisit is the number returned by the above url
+//         function (res_numOfVisit) {
+//             ajaxUtils.sendGetRequest(homeHtml, function (response_homeHtml) {
+//                 // 20230111: insertProperty returns a new version of responseText (string) which has {{num_of_visit}} replaced
+//                 insertHtml("#main-content", insertProperty(response_homeHtml, "num_of_visit", res_numOfVisit))
+//             }, false)
+//         },
+//         false);
+// }
+
+
+
+
+
+
+
+
+
+
 
 
 

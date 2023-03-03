@@ -30,25 +30,28 @@
     <div class="col-md-6">
         <div class="h-100 p-3 text-bg-light rounded-3">
             <h5 class="text-center">Visits</h5>
-            <p class="text-center">
+            <p id="avg-num-of-visitsssss" class="text-center">
                 <!-- Some sort of dynamic loading of numbers depending on the data  -->
                 <!-- 20221130: This number depends on the cat_data in the postgres database -->
                 <!-- 20221130: Backend comes in here? How to integrate-->
                 <!-- 20230106: maybe its a form. Something like <form action="/blabla" method="GET"> -->
-                <scan id="num_of_visit">{{num_of_visit}}</scan>
+                <!-- <scan> is taken out to be its own snippet, dynamically loading it will be easier. -->
+                <scan id="avg-num-of-visits"></scan>
                 times (All Time Avg.)
             </p>
             <div class="d-flex justify-content-between pb-3">
                 <!-- Radio toggle buttons https://getbootstrap.com/docs/5.2/forms/checks-radios/ -->
+                <!-- 20230231: multiple function calls are allowed for a click event. Simply separate the function calls with a semicolon  -->
+                <!-- catData.loadAvgDailyVisits()  catData.loadAvgWeeklyVisits(); taken out for now -->
                 <input type="radio" class="btn-check" name="options-outlined" id="day" autocomplete="off" checked>
-                <label class="btn btn-outline-primary" for="day" onclick="catData.loadDailyVisitGraph();">Day</label>
+                <label class="btn btn-outline-primary" for="day" onclick="catData.loadDailyVisits(); ">Day</label>
 
                 <input type="radio" class="btn-check" name="options-outlined" id="week" autocomplete="off">
-                <label class="btn btn-outline-primary" for="week" onclick="catData.loadWeeklyVisitGraph();">Week</label>
+                <label class="btn btn-outline-primary" for="week" onclick="catData.loadWeeklyVisits();">Week</label>
 
                 <input type="radio" class="btn-check" name="options-outlined" id="month" autocomplete="off">
                 <label class="btn btn-outline-primary" for="month"
-                    onclick="catData.loadMonthlyVisitGraph();">Month</label>
+                    onclick="catData.loadMonthlyVisits();">Month</label>
             </div>
 
             <div id="visit-graph" class="container">
