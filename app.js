@@ -4,6 +4,7 @@
 // It must be initiated on the server before having any effect (use node app.js in the command line to initiate it.)
 
 // Grab all the things we need
+const { response } = require('express')
 const express = require('express')
 const { retrieveAvgDailyVisits, retrieveAvgWeeklyVisits, retrieveAvgMonthlyVisits } = require('./avgVisits')
 const { getDailyAverageDuration, createChart } = require('./avg_duration_per_visit')
@@ -42,20 +43,32 @@ app.get('/api/v1/retrieveAvgMonthlyVisits', (req, res) => {
      })
  })
 
-app.get('/chart', async (req, res) => {
-   try {
-     const data = await getDailyAverageDuration();
-     const chartImage = await createChart(data);
-     res.writeHead(200, {
-       'Content-Type': 'image/png',
-       'Content-Length': chartImage.length
-     });
-     res.end(chartImage);
-   } catch (err) {
-     console.error(err);
-     res.status(500).send('Internal Server Error');
-   }
- });
+ app.get('/api/v1//avgTimePerVisitDaily', (req, res) => {
+  try {
+    const avgTimePerVisitDailyData = getDailyAverageDuration();
+    avgTimePerVisitDailyData.then((response) => {
+      res.status(200).send(response)
+    })
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
+// app.get('/api/v1//avgTimePerVisitDaily', async (req, res) => {
+//    try {
+//      const data = await getDailyAverageDuration();
+//      const chartImage = await createChart(data);
+//      res.writeHead(200, {
+//        'Content-Type': 'image/png',
+//        'Content-Length': chartImage.length
+//      });
+//      res.end(chartImage);
+//    } catch (err) {
+//      console.error(err);
+//      res.status(500).send('Internal Server Error');
+//    }
+//  });
   
  
 // Start our node server 

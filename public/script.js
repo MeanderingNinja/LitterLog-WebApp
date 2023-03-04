@@ -1,3 +1,4 @@
+
 // ***********************Helper function for inserting innerHTML identified by 'selector' ***************************
 // Helper Function #1
 const insertHtml = function (selector, html) {
@@ -24,13 +25,15 @@ const showLoading = function (selector) {
 };
 
 
-
+//import plotly from 'https://cdn.plot.ly/plotly-latest.min.js'
 //*********************** Dynamically loading home page content *****************
 
 // homeHtml to be inserted to #main-content 
 let homeHtml = "snippets/home-page.html";
 // 20230111: url that can be used to fetch the number of visits
 let retrieveAvgDailyVisits = "/api/v1/retrieveAvgDailyVisits";
+// 20230303:
+let getAvgTimePerVisitDaily = "/api/v1//avgTimePerVisitDaily"
  
 // On page load (before images or CSS)
 document.addEventListener("DOMContentLoaded", function () {
@@ -40,13 +43,53 @@ document.addEventListener("DOMContentLoaded", function () {
     ajaxUtils.sendGetRequest(
         homeHtml, 
         function (response_homeHtml) {insertHtml("#main-content", response_homeHtml)}, 
-        false)
+        false);
     // Get the avg num of daily visits and insert it to #avg-num-of-visits in home-page.html (upon first load)
     ajaxUtils.sendGetRequest(
         retrieveAvgDailyVisits,
         function (responseText) { insertHtml("#avg-num-of-visits", responseText)}, 
         false);
-
+    // Inset graph to #TimeSpan-graph in home-page.html (Worked 20230303!)
+    ajaxUtils.sendGetRequest(getAvgTimePerVisitDaily, 
+        function(data){
+            const trace = {
+                x: data.map(row => row.date),
+                y: data.map(row => row.avg_duration),
+                type: "scatter",
+                mode: "lines+markers",
+                marker: {
+                  color: "blue"
+                },
+                line: {
+                  color: "blue"
+                }
+              };
+          
+              const layout = {
+                title: "Daily Average Duration per Visit",
+                xaxis: {
+                  title: "Date"
+                },
+                yaxis: {
+                  title: "Average Duration"
+                }
+              };
+          
+              const graphOptions = {
+                layout: layout,
+                filename: "daily-average-duration",
+                fileopt: "overwrite"
+              };
+              // Plotly has to be captialized here to work 
+              Plotly.newPlot("TimeSpan-graph", [trace], layout, function (err, msg) {
+                if (err) {
+                  console.error(err);
+                } else {
+                  console.log(msg);
+                }
+              });
+              // true instead of false here
+        }, true); 
 });
 
 // ************************** Dynamically load visit graphs and avg number of visits above the Day/Week/Month buttons *******************
@@ -99,6 +142,8 @@ catData.loadMonthlyVisits = function () {
     ajaxUtils.sendGetRequest(retrieveAvgMonthlyVisits,
         function (responseText) { insertHtml("#avg-num-of-visits", responseText) }, false);
 };
+
+
 
 
 
