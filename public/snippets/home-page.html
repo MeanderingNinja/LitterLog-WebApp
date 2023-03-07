@@ -31,47 +31,56 @@
         <div class="h-100 p-3 text-bg-light rounded-3">
             <h5 class="text-center">Visits</h5>
             <p id="avg-num-of-visitsssss" class="text-center">
-                <!-- Some sort of dynamic loading of numbers depending on the data  -->
                 <!-- 20221130: This number depends on the cat_data in the postgres database -->
-                <!-- 20221130: Backend comes in here? How to integrate-->
-                <!-- 20230106: maybe its a form. Something like <form action="/blabla" method="GET"> -->
-                <!-- <scan> is taken out to be its own snippet, dynamically loading it will be easier. -->
                 <scan id="avg-num-of-visits"></scan>
                 times (All Time Avg.)
             </p>
+            <!-- pd-3: padding on the bottom -->
             <div class="d-flex justify-content-between pb-3">
                 <!-- Radio toggle buttons https://getbootstrap.com/docs/5.2/forms/checks-radios/ -->
                 <!-- 20230231: multiple function calls are allowed for a click event. Simply separate the function calls with a semicolon  -->
-                <!-- catData.loadAvgDailyVisits()  catData.loadAvgWeeklyVisits(); taken out for now -->
-                <input type="radio" class="btn-check" name="options-outlined" id="day" autocomplete="off" checked>
-                <label class="btn btn-outline-primary" for="day" onclick="catData.loadDailyVisits(); ">Day</label>
+                <!-- The value of the attribute `for` should match the value of `id`-->
+                <!-- `name` attribute is used to group related radio buttons together.-->
+                <input type="radio" class="btn-check" name="options-outlined" id="day-visit" autocomplete="off" checked>
+                <label class="btn btn-outline-primary" for="day-visit" onclick="catData.loadDailyVisits(); ">Day</label>
 
-                <input type="radio" class="btn-check" name="options-outlined" id="week" autocomplete="off">
-                <label class="btn btn-outline-primary" for="week" onclick="catData.loadWeeklyVisits();">Week</label>
+                <input type="radio" class="btn-check" name="options-outlined" id="week-visit" autocomplete="off">
+                <label class="btn btn-outline-primary" for="week-visit" onclick="catData.loadWeeklyVisits();">Week</label>
 
-                <input type="radio" class="btn-check" name="options-outlined" id="month" autocomplete="off">
-                <label class="btn btn-outline-primary" for="month"
+                <input type="radio" class="btn-check" name="options-outlined" id="month-visit" autocomplete="off">
+                <label class="btn btn-outline-primary" for="month-visit"
                     onclick="catData.loadMonthlyVisits();">Month</label>
             </div>
 
             <div id="visit-graph" class="container">
-                <!-- Update dymanically with real graph created on metabase -->
+                <!-- Update dynamically with real graph created on metabase -->
                 <!-- 20230112: The following is the default daily graph. Radio buttons for week and month can be clicked for weekly and monthly graph-->
-                <iframe src="http://192.168.1.157/public/question/29d65c83-daae-4da9-9f26-f6c2ad45513f" frameborder="0"
-                    width="100%" height="600" allowtransparency></iframe>
+                <!-- <iframe src="http://192.168.1.157/public/question/29d65c83-daae-4da9-9f26-f6c2ad45513f" frameborder="0"
+                    width="100%" height="600" allowtransparency></iframe> -->
             </div>
         </div>
     </div>
     <div class="col-md-6">
         <div class="h-100 p-3 text-bg-dark border rounded-3">
             <h5 class="text-center">Average Time Span</h5>
-            <p class="text-center">132 secs (All Time Avg.)</p>
-            <div class="d-flex justify-content-between">
-                <button class="btn btn-outline-light" type="button">Day</button>
+            <p class="text-center"> <scan id="avgTimePerVisit"></scan> secs (All Time Avg.)</p>
+            <div class="d-flex justify-content-between pb-3">
+                <!-- 20230306: Change these buttons to radio toggle buttons -->
+                <input type="radio" class="btn-check" name="options-outlined-timespan" id="day-timespan" autocomplete="off" checked>
+                <label class="btn btn-outline-light" for="day-timespan" onclick="catData.loadDailyAvgTimePerVisit();">Day</label>
+
+                <input type="radio" class="btn-check" name="options-outlined-timespan" id="week-timespan" autocomplete="off">
+                <label class="btn btn-outline-light" for="week-timespan" onclick="catData.loadWeeklyAvgTimePerVisit();">Week</label>
+
+                <input type="radio" class="btn-check" name="options-outlined-timespan" id="month-timespan" autocomplete="off">
+                <label class="btn btn-outline-light" for="month-timespan"
+                    onclick="catData.loadMonthlyAvgTimePerVisit();">Month</label>
+
+                <!-- <button class="btn btn-outline-light" type="button">Day</button>
                 <button class="btn btn-outline-light" type="button">Week</button>
-                <button class="btn btn-outline-light" type="button">Month</button>
+                <button class="btn btn-outline-light" type="button">Month</button> -->
             </div>
-            <div id="TimeSpan-graph" class="container">
+            <div id="TimeSpan-graph" class="container pe-3">
                 <!-- 20221107: the graph here should be dependent on our data-->
                 <!-- <img class="p-4" src="images/sample-bar-graph.jpg" alt="" width="100%"> -->
             </div>

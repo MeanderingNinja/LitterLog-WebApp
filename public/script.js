@@ -3,6 +3,7 @@
 // Helper Function #1
 const insertHtml = function (selector, html) {
     let targetElem = document.querySelector(selector);
+    console.log("20230306: " + targetElem)
     //innerHTML: sets the HTML markup contained within the element.
     targetElem.innerHTML = html;
 };
@@ -25,16 +26,15 @@ const showLoading = function (selector) {
 };
 
 
-//import plotly from 'https://cdn.plot.ly/plotly-latest.min.js'
+
 //*********************** Dynamically loading home page content *****************
 
 // homeHtml to be inserted to #main-content 
 let homeHtml = "snippets/home-page.html";
 // 20230111: url that can be used to fetch the number of visits
 let retrieveAvgDailyVisits = "/api/v1/retrieveAvgDailyVisits";
-// 20230303:
-let getAvgTimePerVisitDaily = "/api/v1//avgTimePerVisitDaily"
- 
+
+
 // On page load (before images or CSS)
 document.addEventListener("DOMContentLoaded", function () {
     showLoading("#main-content");
@@ -42,63 +42,37 @@ document.addEventListener("DOMContentLoaded", function () {
     //sendGetRequest takes 3 arguments: requestUrl, responseHandler, isJsonResponse
     ajaxUtils.sendGetRequest(
         homeHtml, 
-        function (response_homeHtml) {insertHtml("#main-content", response_homeHtml)}, 
+        function (response_homeHtml) {insertHtml("#main-content", response_homeHtml);    
+        // 20230306: Call the callback function after the HTML content is inserted
+        onHomePageLoad(); }, 
         false);
-    // Get the avg num of daily visits and insert it to #avg-num-of-visits in home-page.html (upon first load)
-    ajaxUtils.sendGetRequest(
-        retrieveAvgDailyVisits,
-        function (responseText) { insertHtml("#avg-num-of-visits", responseText)}, 
-        false);
-    // Inset graph to #TimeSpan-graph in home-page.html (Worked 20230303!)
-    ajaxUtils.sendGetRequest(getAvgTimePerVisitDaily, 
-        function(data){
-            const trace = {
-                x: data.map(row => row.date),
-                y: data.map(row => row.avg_duration),
-                type: "scatter",
-                mode: "lines+markers",
-                marker: {
-                  color: "blue"
-                },
-                line: {
-                  color: "blue"
-                }
-              };
-          
-              const layout = {
-                title: "Daily Average Duration per Visit",
-                xaxis: {
-                  title: "Date"
-                },
-                yaxis: {
-                  title: "Average Duration"
-                }
-              };
-          
-              const graphOptions = {
-                layout: layout,
-                filename: "daily-average-duration",
-                fileopt: "overwrite"
-              };
-              // Plotly has to be captialized here to work 
-              Plotly.newPlot("TimeSpan-graph", [trace], layout, function (err, msg) {
-                if (err) {
-                  console.error(err);
-                } else {
-                  console.log(msg);
-                }
-              });
-              // true instead of false here
-        }, true); 
 });
+
+onHomePageLoad = function() {
+  // Load the daily visit graph and the avg number if daily visits
+  catData.loadDailyVisits();
+  // Inset graph to #TimeSpan-graph in home-page.html (Worked 20230303!)
+  catData.loadDailyAvgTimePerVisit();
+  loadAvgTimePerVisitAllTime();
+}
+
+// 20230306: function to insert the all time avg time per vist to #avgTimePerVisitAllTime in home-page.html. 
+let avgTimePerVisit = '/api/v1/avgTimePerVisitAllTime'
+loadAvgTimePerVisitAllTime = function() {
+  ajaxUtils.sendGetRequest(avgTimePerVisit, 
+    function(res) {
+      insertHtml("#avgTimePerVisit", res)
+    }, false
+    )
+}
+
 
 // ************************** Dynamically load visit graphs and avg number of visits above the Day/Week/Month buttons *******************
 // **************** Functions below are call back functions for click events set up in home-page.html *************** 
 let catData = {};
  
-let daily_visit_graph_html = "snippets/daily_visit_graph.html";
-
 // **** Function #1: Load the daily visit graph and the avg number if daily visits ****
+let daily_visit_graph_html = "snippets/daily_visit_graph.html";
 catData.loadDailyVisits = function () {
     showLoading("#visit-graph");
     // Insert the graph showing number of visits on a DAILY basis 
@@ -111,12 +85,10 @@ catData.loadDailyVisits = function () {
 };
 
 
-
+// **** Function #2: Load the daily visit graph and avg visits per week ****
 let weekly_visit_graph_html = "snippets/weekly_visit_graph.html";
 // 20230111: url that can be used to fetch the avg number of weekly visits
 let retrieveAvgWeeklyVisits = "/api/v1/retrieveAvgWeeklyVisits";
-
-// **** Function #2: Load the daily visit graph and avg visits per week ****
 catData.loadWeeklyVisits = function () {
     showLoading("#visit-graph");
     // Insert the graph showing number of visits on a WEEKLY basis 
@@ -128,12 +100,10 @@ catData.loadWeeklyVisits = function () {
 };
 
 
-
+// **** Function #3: Load the monthly visit graph and avg visits per month ****
 let monthly_visit_graph_html = "snippets/monthly_visit_graph.html";
 // 20230111: url that can be used to fetch the avg number of monthly visits
 let retrieveAvgMonthlyVisits = "/api/v1/retrieveAvgMonthlyVisits";
-
-// **** Function #3: Load the monthly visit graph and avg visits per month ****
 catData.loadMonthlyVisits = function () {
     showLoading("#visit-graph");
     ajaxUtils.sendGetRequest(monthly_visit_graph_html,
@@ -145,6 +115,124 @@ catData.loadMonthlyVisits = function () {
 
 
 
+// ************************** Dynamically load average time per visit graphs and avg time per visit above the Day/Week/Month buttons *******************
+// **************** Functions below are call back functions for click events set up in home-page.html *************** 
+
+
+
+// Function #1: Inset graph to #TimeSpan-graph in home-page.html
+// 20230303:
+let getAvgTimePerVisitDaily = "/api/v1//avgTimePerVisitDaily"
+catData.loadDailyAvgTimePerVisit = function () {
+  // showLoading("TimeSpan-graph");
+  ajaxUtils.sendGetRequest(getAvgTimePerVisitDaily, 
+    function(data){
+      //20230303: trying it out for the theme not work. Plotly.Plotly.register(PlotlyThemes);
+        const trace = {
+            x: data.map(row => row.date),
+            y: data.map(row => row.avg_duration),
+            type: "scatter",
+            mode: "lines+markers",
+            marker: {color: "blue"},
+            line: {color: "blue"}
+          };
+
+        const layout = {
+          title: "Daily Average Time per Visit",
+          xaxis: {title: "Date"},
+          yaxis: {title: "Average Time"}
+        }
+        // 20230306: file name in graphOptions specifies the name of the file that will be created when the plot is saved.  
+        // The plot will be saved to your plotly account (I have to import plotly with username like this: const plotly = require('plotly')('username', 'apikey');)
+        // const graphOptions = {
+        //   layout: layout,
+        //   filename: "daily-average-time",
+        //   fileopt: "overwrite"
+        // };
+
+        // Plotly has to be captialized here to work 
+        Plotly.newPlot("TimeSpan-graph", [trace], layout, function (err, msg) {
+          if (err) {
+            console.error(err);
+          } else {
+            console.log(msg);
+          }
+        });
+    }, 
+    true); // true instead of false here
+}
+
+
+// Function #2: Inset graph to #TimeSpan-graph in home-page.html
+// 20230303: Work in progress
+let getAvgTimePerVisitWeekly = "/api/v1//avgTimePerVisitWeekly"
+catData.loadWeeklyAvgTimePerVisit = function () {
+  // showLoading("TimeSpan-graph");
+  ajaxUtils.sendGetRequest(getAvgTimePerVisitWeekly, 
+    function(data){
+      //20230303: trying it out for the theme not work. Plotly.Plotly.register(PlotlyThemes);
+        const trace = {
+            x: data.map(row => row.week),
+            y: data.map(row => row.avg_duration),
+            type: "scatter",
+            mode: "lines+markers",
+            marker: {color: "blue"},
+            line: {color: "blue"}
+          };
+
+        const layout = {
+          title: "Weekly Average Time per Visit",
+          xaxis: {title: "Date"},
+          yaxis: {title: "Average Time"}
+        }
+
+        // Plotly has to be captialized here to work 
+        Plotly.newPlot("TimeSpan-graph", [trace], layout, function (err, msg) {
+          if (err) {
+            console.error(err);
+          } else {
+            console.log(msg);
+          }
+        });
+    }, 
+    true); // true instead of false here
+}
+
+
+// Function #3: Inset graph to #TimeSpan-graph in home-page.html
+// 20230303: 
+let getAvgTimePerVisitMonthly = "/api/v1//avgTimePerVisitMonthly"
+catData.loadMonthlyAvgTimePerVisit = function () {
+  // showLoading("TimeSpan-graph");
+  ajaxUtils.sendGetRequest(getAvgTimePerVisitMonthly, 
+    function(data){
+      //20230303: trying it out for the theme not work. Plotly.Plotly.register(PlotlyThemes);
+        const trace = {
+            x: data.map(row => row.month),
+            y: data.map(row => row.avg_duration),
+            type: "scatter",
+            mode: "lines+markers",
+            marker: {color: "blue"},
+            line: {color: "blue"}
+          };
+
+        const layout = {
+          title: "Monthly Average Time per Visit",
+          xaxis: {title: "Date"},
+          yaxis: {title: "Average Time"}
+        }
+
+        // Plotly has to be captialized here to work 
+        Plotly.newPlot("TimeSpan-graph", [trace], layout, function (err, msg) {
+          if (err) {
+            console.error(err);
+          } else {
+            console.log(msg);
+          }
+        });
+    }, 
+    true); // true instead of false here
+}
 
 
 

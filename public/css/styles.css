@@ -23,6 +23,11 @@ body {
   margin: 5px 5px 5px 0;
 }
 
+#TimeSpan-graph {
+  width: 100%;
+  height: 600;
+}
+
 /* Project name */
 /* #project-name {
   font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;

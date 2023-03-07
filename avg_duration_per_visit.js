@@ -6,9 +6,19 @@
 // connect to the database and then run SQL query. 
 const { pool } = require('./db');
 
+
+async function getAllTimeAverageDuration() {
+  const sql_query = `
+  SELECT ROUND(AVG(Cast(duration AS numeric)), 2) AS avg_duration
+  FROM cat_data
+  `;
+
+  const result = await pool.query(sql_query);
+  return result.rows[0].avg_duration;
+}
+
+
 async function getDailyAverageDuration() {
-    // query the cat_data table to get the average duration per visit on a daily basis
-    // Tested to run 20230302
     const sql_query = `
     SELECT date, AVG(duration) AS avg_duration
     FROM cat_data
@@ -21,7 +31,31 @@ async function getDailyAverageDuration() {
     return result.rows;
   }
 
-module.exports = {getDailyAverageDuration}
+async function getWeeklyAverageDuration() {
+  const sql_query = `
+  SELECT DATE_TRUNC('week', date) as week, AVG(duration) AS avg_duration
+  FROM cat_data
+  GROUP BY DATE_TRUNC('week', date)
+  ORDER BY DATE_TRUNC('week', date)
+  `;
+  const result = await pool.query(sql_query);
+  console.log(result.rows)
+  return result.rows;
+}
+
+async function getMonthlyAverageDuration() {
+  const sql_query = `
+  SELECT DATE_TRUNC('month', date) as month, AVG(duration) AS avg_duration
+  FROM cat_data
+  GROUP BY DATE_TRUNC('month', date)
+  ORDER BY DATE_TRUNC('month', date)
+  `;
+  const result = await pool.query(sql_query);
+  console.log(result.rows)
+  return result.rows;
+}
+
+module.exports = {getDailyAverageDuration, getWeeklyAverageDuration, getMonthlyAverageDuration, getAllTimeAverageDuration}
 
 
 
