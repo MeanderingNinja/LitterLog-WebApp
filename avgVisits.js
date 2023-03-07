@@ -1,26 +1,49 @@
-/**  
- * 20230228: Returns the avg daily data entries we have in the database. 
-*/
+/**
+ * Module for retrieving the cat's average numbers of daily, weekly, and monthly visits to the bathroom.
+ * Uses a connection pool from the 'db' module to execute SQL queries on a 'cat_data' table.
+ * 
+ * @module avgVisits
+ */
 
 // connect to the database and then run SQL query. 
 const { pool } = require('./db');
 
+
+/**
+ * Retrieves the average number of daily visits to the cat bathroom.
+ * 
+ * @async
+ * @function retrieveAvgDailyVisits
+ * @param {object} req - The HTTP request object.
+ * @param {object} res - The HTTP response object.
+ * @returns {number} The average number of daily visits to the bathroom.
+ */
 async function retrieveAvgDailyVisits(req, res) {
+    // SQL query to calculate the average daily visits
     sql_query = "SELECT COUNT(*)/COUNT(DISTINCT date) as avg_daily_visits FROM cat_data"
     try {
-        // queryResult is the returned object
+        // `queryResult` is the returned object
         const queryResult = await pool.query(sql_query); 
-        // rows is a property of the query result object
+        // `rows` is a property of the queryresult object
         const avg_daily_visits = queryResult.rows[0].avg_daily_visits;
-        console.log("In avgDailyVisits.js, avg_daily_visits is " + avg_daily_visits);
         return avg_daily_visits;
+
     } catch (error) {
         console.error(error);
     }
 }
 
-// retrieveAvgDailyVisits();
 
+
+/**
+ * Retrieves the average number of weekly visits to the cat bathroom.
+ * 
+ * @async
+ * @function retrieveAvgWeeklyVisits
+ * @param {object} req - The HTTP request object.
+ * @param {object} res - The HTTP response object.
+ * @returns {number} The average number of weekly visits to the bathroom.
+ */
 async function retrieveAvgWeeklyVisits(req, res) {
 
     // Grouping the entries by week using the DATE_TRUNC function
@@ -37,22 +60,25 @@ async function retrieveAvgWeeklyVisits(req, res) {
 
     try {
         const queryResult = await pool.query(sql_query);
-        // rows is a property of the query result object
         const avg_visits_per_week = queryResult.rows[0].avg_visits_per_week;
-        console.log("avg_visits_per_week is " + avg_visits_per_week);
         return avg_visits_per_week;
     } catch (error) {
         console.error(error);
     }
 }
 
-//retrieveAvgWeeklyVisits()
 
+/**
+ * Retrieves the average number of monthly visits to the cat bathroom.
+ * 
+ * @async
+ * @function retrieveAvgMonthlyVisits
+ * @param {object} req - The HTTP request object.
+ * @param {object} res - The HTTP response object.
+ * @returns {number} The average number of monthly visits to the bathroom.
+ */
 async function retrieveAvgMonthlyVisits(req, res) {
 
-    // Grouping the entries by week using the DATE_TRUNC function
-    // The result of the subquery is a table with a single column entries_per_week, 
-    // which contains integer values representing the number of entries in each week
     sql_query = ` 
     SELECT ROUND(AVG(visits_per_month), 2) AS avg_visits_per_month 
     FROM ( 
@@ -64,9 +90,7 @@ async function retrieveAvgMonthlyVisits(req, res) {
 
     try {
         const queryResult = await pool.query(sql_query);
-        // rows is a property of the query result object
         const avg_visits_per_month = queryResult.rows[0].avg_visits_per_month;
-        console.log("avg_visits_per_month is " + avg_visits_per_month);
         return avg_visits_per_month;
     } catch (error) {
         console.error(error);

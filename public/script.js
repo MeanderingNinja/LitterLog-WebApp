@@ -32,7 +32,7 @@ const showLoading = function (selector) {
 // homeHtml to be inserted to #main-content 
 let homeHtml = "snippets/home-page.html";
 // 20230111: url that can be used to fetch the number of visits
-let retrieveAvgDailyVisits = "/api/v1/retrieveAvgDailyVisits";
+let retrieveAvgDailyVisits = "/api/v1/avgDailyVisits";
 
 
 // On page load (before images or CSS)
@@ -88,7 +88,7 @@ catData.loadDailyVisits = function () {
 // **** Function #2: Load the daily visit graph and avg visits per week ****
 let weekly_visit_graph_html = "snippets/weekly_visit_graph.html";
 // 20230111: url that can be used to fetch the avg number of weekly visits
-let retrieveAvgWeeklyVisits = "/api/v1/retrieveAvgWeeklyVisits";
+let retrieveAvgWeeklyVisits = "/api/v1/avgWeeklyVisits";
 catData.loadWeeklyVisits = function () {
     showLoading("#visit-graph");
     // Insert the graph showing number of visits on a WEEKLY basis 
@@ -103,7 +103,7 @@ catData.loadWeeklyVisits = function () {
 // **** Function #3: Load the monthly visit graph and avg visits per month ****
 let monthly_visit_graph_html = "snippets/monthly_visit_graph.html";
 // 20230111: url that can be used to fetch the avg number of monthly visits
-let retrieveAvgMonthlyVisits = "/api/v1/retrieveAvgMonthlyVisits";
+let retrieveAvgMonthlyVisits = "/api/v1/avgMonthlyVisits";
 catData.loadMonthlyVisits = function () {
     showLoading("#visit-graph");
     ajaxUtils.sendGetRequest(monthly_visit_graph_html,
