@@ -6,22 +6,21 @@
             height="100">
         <span class="fs-4 fw-bold text-dark">Atticus</span>
         <p class="col-md-12 fs-5 text-muted pt-3">
-            Your pet Atticus' average bathroom bahavior data is shown in the two graphs
-            below.
+            Your pet Atticus' bathroom data is shown in the two graphs below. 
         </p>
         <!-- Use grid system for the two buttons -->
         <div class="row">
             <div class="col-md-6">
-                <button class="btn btn-primary btn-lg bg-success text-white border-light"><span class="fs-6">Everything
+                <button class="btn btn-primary btn-lg bg-success text-white border-light"><span class="fs-7">Everything
                         looks
                         great!</span></button>
             </div>
-            <div class="col-md-6">
+            <!-- <div class="col-md-6">
                 <button class="btn btn-primary btn-lg bg-warning text-dark border-light"><span class="fs-6">We've
                         detected an
                         anormaly!</span>
                 </button>
-            </div>
+            </div> -->
         </div>
     </div>
 </div>
@@ -64,8 +63,9 @@
         <div class="h-100 p-3 text-bg-dark border rounded-3">
             <h5 class="text-center">Average Time Span</h5>
             <p class="text-center"> <scan id="avgTimePerVisit"></scan> secs (All Time Avg.)</p>
+            <!-- pb: padding bottom -->
             <div class="d-flex justify-content-between pb-3">
-                <!-- 20230306: Change these buttons to radio toggle buttons -->
+                <!-- 20230306: Changed these buttons to radio toggle buttons -->
                 <input type="radio" class="btn-check" name="options-outlined-timespan" id="day-timespan" autocomplete="off" checked>
                 <label class="btn btn-outline-light" for="day-timespan" onclick="catData.loadDailyAvgTimePerVisit();">Day</label>
 
@@ -80,11 +80,10 @@
                 <button class="btn btn-outline-light" type="button">Week</button>
                 <button class="btn btn-outline-light" type="button">Month</button> -->
             </div>
-            <div id="TimeSpan-graph" class="container pe-3">
-                <!-- 20221107: the graph here should be dependent on our data-->
+            <div id="TimeSpan-graph" class="container">
+                <!-- 20221107: the graph here is dependent on our data-->
                 <!-- <img class="p-4" src="images/sample-bar-graph.jpg" alt="" width="100%"> -->
             </div>
-
         </div>
     </div>
 </div>

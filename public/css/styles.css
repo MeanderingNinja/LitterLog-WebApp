@@ -1,7 +1,29 @@
 body {
   font-size: 16px;
-  color: #fff;
+  color: grey;
   font-family: 'Oxygen', sans-serif;
+}
+
+#project-story {
+  font-family: sans-serif, Times;
+}
+#creator-story {
+  font-family: sans-serif, Times;
+}
+
+#about-page-content {
+  background-image: url("../images/Atty-Collin-img.jpg");
+  /* background-size: cover; */
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+#project-story-title {
+  color:deeppink;
+}
+
+#creator-story-title {
+  color:deeppink;
 }
 
 /** HEADER **/
@@ -23,9 +45,9 @@ body {
   margin: 5px 5px 5px 0;
 }
 
+/* 20230307: Shift the graph a bit left ( add some left margin to its parent element). */
 #TimeSpan-graph {
-  width: 100%;
-  height: 600;
+  margin-left: -10px;
 }
 
 /* Project name */

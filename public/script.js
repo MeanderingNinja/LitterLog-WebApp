@@ -26,28 +26,54 @@ const showLoading = function (selector) {
 };
 
 
+// 20230308: Hide collapsed menu items when user clicks outside of menu area
+document.addEventListener("click", function(event){
+  // Check if the clicked element is inside the menu or not, by using the contains method on the nav-list and navbarToggle elements.
+  let isClickInsideNav = document.querySelector("#nav-list").contains(event.target);
+  let isClickInsideToggler = document.querySelector("#navbarToggle").contains(event.target);
+  if (!isClickInsideNav && !isClickInsideToggler){
+    let collapsableNav = document.querySelector("#collapsable-nav");
+    collapsableNav.classList.remove("show");
+  }
+});
 
-//*********************** Dynamically loading home page content *****************
 
+//*********************** Dynamically loading home page content *********************
+// On page load (before images or CSS)
+document.addEventListener("DOMContentLoaded", function () {
+  catData.loadHomePage()
+});
+
+
+let catData = {};
 // homeHtml to be inserted to #main-content 
 let homeHtml = "snippets/home-page.html";
 // 20230111: url that can be used to fetch the number of visits
 let retrieveAvgDailyVisits = "/api/v1/avgDailyVisits";
 
+// function to toggle between Home and About button 
+catData.toggleActive = function(clickedButton){
+  // Remove the "active" class from all buttons
+  let navLinks = document.querySelectorAll('.nav-link');
+  navLinks.forEach(function(navLink) {
+    navLink.classList.remove('active');
+  });
+  // Add the "active" class to the clicked button
+  clickedButton.classList.add('active');
+}
 
-// On page load (before images or CSS)
-document.addEventListener("DOMContentLoaded", function () {
-    showLoading("#main-content");
-    // 20230302: insert home-page.html snippet 
-    //sendGetRequest takes 3 arguments: requestUrl, responseHandler, isJsonResponse
-    ajaxUtils.sendGetRequest(
-        homeHtml, 
-        function (response_homeHtml) {insertHtml("#main-content", response_homeHtml);    
-        // 20230306: Call the callback function after the HTML content is inserted
-        onHomePageLoad(); }, 
-        false);
-});
+// Function to dynamically load the Home page
+catData.loadHomePage = function(){
+  showLoading("#main-content");
+  ajaxUtils.sendGetRequest(
+      homeHtml, 
+      function (response_homeHtml) {insertHtml("#main-content", response_homeHtml);    
+      // 20230306: Call the callback function after the HTML content is inserted
+      onHomePageLoad();}, 
+      false);
+}
 
+// Function to load data and graphs after the home page html snippet is loaded
 onHomePageLoad = function() {
   // Load the daily visit graph and the avg number if daily visits
   catData.loadDailyVisits();
@@ -56,20 +82,19 @@ onHomePageLoad = function() {
   loadAvgTimePerVisitAllTime();
 }
 
-// 20230306: function to insert the all time avg time per vist to #avgTimePerVisitAllTime in home-page.html. 
-let avgTimePerVisit = '/api/v1/avgTimePerVisitAllTime'
-loadAvgTimePerVisitAllTime = function() {
-  ajaxUtils.sendGetRequest(avgTimePerVisit, 
-    function(res) {
-      insertHtml("#avgTimePerVisit", res)
-    }, false
-    )
+
+// Function to dynamically load the about page
+let aboutPage = "snippets/about-page.html";
+catData.loadAboutPage = function(){
+  showLoading("#main-content")
+  ajaxUtils.sendGetRequest(aboutPage,
+    function(response_aboutHtml){
+      insertHtml("#main-content", response_aboutHtml)
+    }, false)
 }
-
-
 // ************************** Dynamically load visit graphs and avg number of visits above the Day/Week/Month buttons *******************
 // **************** Functions below are call back functions for click events set up in home-page.html *************** 
-let catData = {};
+
  
 // **** Function #1: Load the daily visit graph and the avg number if daily visits ****
 let daily_visit_graph_html = "snippets/daily_visit_graph.html";
@@ -113,7 +138,15 @@ catData.loadMonthlyVisits = function () {
         function (responseText) { insertHtml("#avg-num-of-visits", responseText) }, false);
 };
 
-
+// 20230306: function to insert the all time avg time per vist to #avgTimePerVisitAllTime in home-page.html. 
+let avgTimePerVisit = '/api/v1/avgTimePerVisitAllTime'
+loadAvgTimePerVisitAllTime = function() {
+  ajaxUtils.sendGetRequest(avgTimePerVisit, 
+    function(res) {
+      insertHtml("#avgTimePerVisit", res)
+    }, false
+    )
+}
 
 // ************************** Dynamically load average time per visit graphs and avg time per visit above the Day/Week/Month buttons *******************
 // **************** Functions below are call back functions for click events set up in home-page.html *************** 
@@ -151,7 +184,8 @@ catData.loadDailyAvgTimePerVisit = function () {
         // };
 
         // Plotly has to be captialized here to work 
-        Plotly.newPlot("TimeSpan-graph", [trace], layout, function (err, msg) {
+        // 20230307: {responsive: true} makes sure that the graph is responsive to window resizing
+        Plotly.newPlot("TimeSpan-graph", [trace], layout, {responsive: true}, function (err, msg) {
           if (err) {
             console.error(err);
           } else {
@@ -233,7 +267,6 @@ catData.loadMonthlyAvgTimePerVisit = function () {
     }, 
     true); // true instead of false here
 }
-
 
 
 

@@ -13,12 +13,16 @@
 
 <body>
     <header>
+        <!-- 20230308: The navbar consists of a logo, project name, and two 
+            navigation links (Home and About). It is responsive and can be 
+            collapsed on small screens using the toggle button. -->
+
         <!-- .navbar-expand-lg: automatically collapse at the lg breakpoint  -->
         <!-- This .navbar container's display property's value is flex -->
         <nav id="header-nav" class="navbar navbar-expand-lg navbar-dark bg-dark">
             <!-- container changes its width based on the width of the browser -->
             <div class="container">
-                <!--------------- .navbar-brand defines the logo, project name ------------->
+                <!--------------- .navbar-brand (subcomponent of navbar) defines the logo, project name ------------->
                 <a class="navbar-brand d-flex align-items-center" href="index.html">
                     <!-- Logo image -->
                     <!-- .flex-fill works on sibling elements to add space between them -->
@@ -38,13 +42,12 @@
                 <div id="collapsable-nav" class="collapse navbar-collapse justify-content-end">
                     <div id="nav-list">
                         <ul class="navbar-nav">
-                            <!-- 20221130: Home and About Link doesn't direct to anywhere now -->
-                            <!-- Edit this in the future -->
                             <li class="nav-item">
-                                <a href="#" class="nav-link" id="navHomeButton">Home</a>
+                                <!-- `active` ensures that Home button is selected by default  -->
+                                <a href="#home" onclick="catData.loadHomePage(); catData.toggleActive(this);" class="nav-link active" id="navHomeButton">Home</a>
                             </li>
                             <li class="nav-item">
-                                <a href="#" class="nav-link" id="navAboutButton">About</a>
+                                <a href="#about" onclick="catData.loadAboutPage(); catData.toggleActive(this);" class="nav-link" id="navAboutButton">About</a>
                             </li>
                         </ul>
                     </div>
@@ -71,16 +74,15 @@
             <a class="navbar-brand d-flex align-items-center" href="index.html">
                 <!-- .flex-fill works on sibling elements to add space between them -->
                 <img id="logo-img-sm" class="d-none d-md-block" src="images/logo-img-small.jpg" width="50" height="50">
-                <scan id="contact-me" class="fw-bold fst-italic text-muted ps-3">
+                <scan id="contact-me" class="fw-bold text-muted ps-3">
                     Contact me at: emma.lijing0723@gmail.com
-
                 </scan>
             </a>
         </div>
 
         <!-- Copyright -->
         <div class="text-center text-dark p-3">
-            © 2022 Copyright:
+            © 2023 Copyright:
             <a class="text-dark" href="https://mdbootstrap.com/">meanderingtech.com</a>
         </div>
         <!-- Copyright -->
