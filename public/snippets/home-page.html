@@ -28,11 +28,11 @@
 <div class="row align-items-md-stretch mb-3">
     <div class="col-md-6">
         <div class="h-100 p-3 text-bg-light rounded-3">
-            <h5 class="text-center">Visits</h5>
-            <p id="avg-num-of-visitsssss" class="text-center">
+            <h5 class="text-center text">Average Number of Visits</h5>
+            <p class="text-center">
                 <!-- 20221130: This number depends on the cat_data in the postgres database -->
-                <scan id="avg-num-of-visits"></scan>
-                times (All Time Avg.)
+                <scan id="avg-num-of-visits" class="badge bg-secondary" style="width: 50px; height: 20px;"></scan>
+                times 
             </p>
             <!-- pd-3: padding on the bottom -->
             <div class="d-flex justify-content-between pb-3">
@@ -61,8 +61,8 @@
     </div>
     <div class="col-md-6">
         <div class="h-100 p-3 text-bg-dark border rounded-3">
-            <h5 class="text-center">Average Time Span</h5>
-            <p class="text-center"> <scan id="avgTimePerVisit"></scan> secs (All Time Avg.)</p>
+            <h5 class="text-center">Average Time Span per Visit</h5>
+            <p class="text-center"> <scan id="avgTimePerVisit" class="badge bg-secondary" style="width: 50px; height: 20px;"></scan> seconds</p>
             <!-- pb: padding bottom -->
             <div class="d-flex justify-content-between pb-3">
                 <!-- 20230306: Changed these buttons to radio toggle buttons -->
