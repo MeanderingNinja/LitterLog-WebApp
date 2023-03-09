@@ -26,7 +26,7 @@ Any other relevant license information.
 
 ## Further Development/Contributing
 
-** New features that could be added **:
+**New features that could be added**:
 
 - A Download button which allows users to download the raw timestamps data 
 - A Sign Up and Log In feature to create a custom profile of the user's cat
