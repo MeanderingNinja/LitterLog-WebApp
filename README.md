@@ -1,7 +1,7 @@
 # The Cat Bathroom Monitoring System Web App
 
 ## Introduction
-This web app is part of the Cat Bathroom Monitoring System Project I've been working on. It displays the timestamps data corresponding to instances of a cat using the litterbox in the form of graphs and numbers. Specifically, on the web app, you can find:
+This web app is part of [the Cat Bathroom Monitoring System Project](https://github.com/emma-jinger/Cat_Bathroom_Monitoring_System) I've been working on. It displays the timestamps data corresponding to instances of a cat using the litterbox in the form of graphs and numbers. Specifically, on the web app, you can find:
 
 - the profile of our family cat - Atticus
 - the average number of bathroom visits on a daily, weekly, and monthly basis
