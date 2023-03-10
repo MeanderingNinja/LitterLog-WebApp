@@ -10,8 +10,8 @@ This web app is part of [the Cat Bathroom Monitoring System Project](https://git
 - the graph that shows the average time Atticus spent per bathroom visit on a daily, weekly, and monthly basis
 - an About page that tells the story of the project and the author
 
-## Installation (for other developers?)
-Provide instructions on how to install and run your web app. This could include:
+## Installation
+
 ### Clone the Repo
 To download the code, navigate to a folder of your choosing on the your machine. First, make sure git is installed:
 ```
