@@ -12,10 +12,31 @@ This web app is part of [the Cat Bathroom Monitoring System Project](https://git
 
 ## Installation (for other developers?)
 Provide instructions on how to install and run your web app. This could include:
+### Clone the Repo
+To download the code, navigate to a folder of your choosing on the your machine. First, make sure git is installed:
+```
+sudo apt update
+sudo apt install git
+```
+Then clone the `cat_bathroom_monitoring_system_web_app` project:
+```
+git clone https://github.com/emma-jinger/cat_bathroom_monitoring_system_web_app
+cd cat_bathroom_monitoring_system_web_app
+```
 
-Step-by-step instructions on how to install any dependencies required by your web app.
-Instructions on how to set up a local development environment.
-Any other relevant installation instructions.
+### Install dependencies:
+Note for me on a brandnew machine: Before the following command, I need to make sure nodejs and nom are installed? Do I need to run in a virtual env? What does that mean? 
+```
+npm install
+``` 
+Note for me on my server: 
+
+### Run the web server
+```
+npm start
+```
+Now you should be able to see the web app with this address `http://locahost:5001` on your browser. 
+
 
 ## License
 Provide information on the license that your web app is released under. This could include:
