@@ -11,6 +11,8 @@ This web app is part of [the Cat Bathroom Monitoring System Project](https://git
 - the graph that shows the average time Atticus spent per bathroom visit on a daily, weekly, and monthly basis
 - an About page that tells the story of the project and the author
 
+![cat_data_graphs_on_web_app]()
+
 ## Installation
 
 ### Clone the Repo
