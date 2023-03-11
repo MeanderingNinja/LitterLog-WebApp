@@ -54,4 +54,4 @@ Now you should be able to see the web app with this address `http://locahost:500
 - A button that allows the user to opt in for getting notified whenever their cat visits the bathroom 
 
 ## Author
-[Jing Li](https://www.linkedin.com/in/jing-li-2369874b/) 
+[Jing (Emma) Li](https://www.linkedin.com/in/jing-li-2369874b/) 
