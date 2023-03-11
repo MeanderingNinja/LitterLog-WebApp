@@ -1,12 +1,18 @@
 /**
- * 20230302: The module retrieve all data from the table cat_data. The return value is a list of dicts
+ * This module provides functions to query average duration statistics.
+ * @module avgDurationPerVisit
  */
 
 
 // connect to the database and then run SQL query. 
 const { pool } = require('./db');
 
-
+/**
+ * Returns the average duration of all records in the database.
+ * @async
+ * @function getAllTimeAverageDuration
+ * @returns {Promise<number>} The average duration of all records in the database.
+ */
 async function getAllTimeAverageDuration() {
   const sql_query = `
   SELECT ROUND(AVG(Cast(duration AS numeric)), 2) AS avg_duration
@@ -18,6 +24,12 @@ async function getAllTimeAverageDuration() {
 }
 
 
+/**
+ * Returns the average duration on a daily basis.
+ * @async
+ * @function getDailyAverageDuration
+ * @returns {Promise<Array>} The average duration on a daily basis.
+ */
 async function getDailyAverageDuration() {
     const sql_query = `
     SELECT date, AVG(duration) AS avg_duration
@@ -27,10 +39,16 @@ async function getDailyAverageDuration() {
     `;
 
     const result = await pool.query(sql_query);
-    console.log(result.rows)
     return result.rows;
   }
 
+
+/**
+ * Returns the average duration on a weekly basis.
+ * @async
+ * @function getWeeklyAverageDuration
+ * @returns {Promise<Array>} Returns the average duration on a weekly basis.
+ */
 async function getWeeklyAverageDuration() {
   const sql_query = `
   SELECT DATE_TRUNC('week', date) as week, AVG(duration) AS avg_duration
@@ -39,10 +57,16 @@ async function getWeeklyAverageDuration() {
   ORDER BY DATE_TRUNC('week', date)
   `;
   const result = await pool.query(sql_query);
-  console.log(result.rows)
   return result.rows;
 }
 
+
+/**
+ * Returns the average duration on a monthly basis.
+ * @async
+ * @function getMonthlyAverageDuration
+ * @returns {Promise<Array>} Returns the average duration on a monthly basis.
+ */
 async function getMonthlyAverageDuration() {
   const sql_query = `
   SELECT DATE_TRUNC('month', date) as month, AVG(duration) AS avg_duration

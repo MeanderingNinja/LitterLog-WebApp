@@ -2,7 +2,7 @@
  * Module for retrieving the cat's average numbers of daily, weekly, and monthly visits to the bathroom.
  * Uses a connection pool from the 'db' module to execute SQL queries on a 'cat_data' table.
  * 
- * @module avgVisits
+ * @module avgNumofVisits
  */
 
 // connect to the database and then run SQL query. 

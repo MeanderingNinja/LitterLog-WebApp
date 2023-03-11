@@ -173,7 +173,7 @@ catData.loadDailyAvgTimePerVisit = function () {
         const layout = {
           title: "Daily Average Time per Visit",
           xaxis: {title: "Date"},
-          yaxis: {title: "Average Time"}
+          yaxis: {title: "Average Time (s)"}
         }
         // 20230306: file name in graphOptions specifies the name of the file that will be created when the plot is saved.  
         // The plot will be saved to your plotly account (I have to import plotly with username like this: const plotly = require('plotly')('username', 'apikey');)

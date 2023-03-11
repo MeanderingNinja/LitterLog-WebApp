@@ -10,8 +10,8 @@
 // Grab all the things we need
 //const { response } = require('express')
 const express = require('express')
-const { retrieveAvgDailyVisits, retrieveAvgWeeklyVisits, retrieveAvgMonthlyVisits } = require('./avgVisits')
-const { getDailyAverageDuration, getWeeklyAverageDuration, getMonthlyAverageDuration, getAllTimeAverageDuration } = require('./avg_duration_per_visit')
+const { retrieveAvgDailyVisits, retrieveAvgWeeklyVisits, retrieveAvgMonthlyVisits } = require('./avgNumofVisits')
+const { getDailyAverageDuration, getWeeklyAverageDuration, getMonthlyAverageDuration, getAllTimeAverageDuration } = require('./avgDurationPerVisit')
  
 // Configure our app
 const app = express()
