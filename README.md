@@ -28,17 +28,19 @@ cd cat_bathroom_monitoring_system_web_app
 ```
 
 ### Install dependencies:
-Note for me on a brandnew machine: Before the following command, I need to make sure nodejs and nom are installed? Do I need to run in a virtual env? What does that mean? 
 ```
 npm install
 ``` 
-Note for me on my server: 
+
 
 ### Run the web server
 ```
 npm start
 ```
 Now you should be able to see the web app with this address `http://locahost:5001` on your browser. 
+
+*Note: The web app queries data from a database on the server. In order for you to see the graphs and numbers displayed on the web app. You need to 
+set up your own database with a table named `cat_data`.  Below is what the table looks like: [cat_data]()*
 
 
 ## License
