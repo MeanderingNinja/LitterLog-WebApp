@@ -39,31 +39,19 @@ npm start
 ```
 Now you should be able to see the web app with this address `http://locahost:5001` on your browser. 
 
-*Note: The web app queries data from a database on the server. In order for you to see the graphs and numbers displayed on the web app. You need to* 
+*Note: The web app queries data from a database on the server. In order for you to see the graphs and numbers displayed on the web app, you need to* 
 *set up your own database with a table named `cat_data`.  Below is what the table looks like:*
 
 ![cat_data](https://github.com/emma-jinger/cat_bathroom_monitoring_system_web_app/blob/main/public/images/cat_data_snippet.png)
 
-
-## License
-Provide information on the license that your web app is released under. This could include:
-
-The license name (e.g. MIT, GPL, Apache).
-A link to the full text of the license.
-Any other relevant license information.
 
 ## Further Development/Contributing
 
 **New features that could be added**:
 
 - A Download button which allows users to download the raw timestamps data 
-- A Sign Up and Log In feature to create a custom profile of the user's cat
+- A Sign Up and Log In feature to create a custom profile for the user's cat
 - A button that allows the user to opt in for getting notified whenever their cat visits the bathroom 
 
-## Authors
-List the authors of your web app, including any contributors or collaborators.
-
-## Acknowledgments
-List any individuals or organizations that you would like to thank for their contributions to your web app.
-
-That's an example of a simple web app documentation structure you can use for your README file. Feel free to modify it according to your needs.
+## Author
+[Jing Li](https://www.linkedin.com/in/emma-jing-li-2369874b/) 
