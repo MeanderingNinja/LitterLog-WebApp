@@ -37,7 +37,7 @@ npm install
 ```
 npm start
 ```
-Now you should be able to see the web app with this address `http://locahost:5001` on your browser. 
+**Now you should be able to see the web app with this address `http://locahost:5001` on your browser.**
 
 *Note: The web app queries data from a database on the server. In order for you to see the graphs and numbers displayed on the web app, you need to* 
 *set up your own database with a table named `cat_data`.  Below is what the table looks like:*
