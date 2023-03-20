@@ -15,7 +15,7 @@ This web app is part of [the Cat Bathroom Monitoring System Project](https://git
 
 ## Installation
 
-### Clone the Repo
+### Clone the Repo.
 To download the code, navigate to a folder of your choosing on the your machine. First, make sure `git`, `Node.js`, and `npm` are installed:
 ```
 sudo apt update
