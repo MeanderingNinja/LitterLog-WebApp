@@ -31,6 +31,7 @@ Any other relevant license information.
 - A Download button which allows users to download the raw timestamps data 
 - A Sign Up and Log In feature to create a custom profile of the user's cat
 - A button that allows the user to opt in for getting notified whenever their cat visits the bathroom 
+- Refactor the repo by using the framework React
 
 ## Authors
 List the authors of your web app, including any contributors or collaborators.
