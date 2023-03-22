@@ -24,37 +24,57 @@ async function getAllTimeAverageDuration() {
 }
 
 
+// /** 20230320 Uncommented
+//  * Returns the duration on a daily basis .
+//  * @async
+//  * @function getDailyAverageDuration
+//  * @returns {Promise<Array>} The average duration on a daily basis.
+//  */
+// async function getDailyAverageDuration() {
+//     const sql_query = `
+//     SELECT date, AVG(duration) AS avg_duration
+//     FROM cat_data
+//     GROUP BY date
+//     ORDER BY date
+//     `;
+
+//     const result = await pool.query(sql_query);
+//     return result.rows;
+//   }
+
 /**
- * Returns the average duration on a daily basis.
+ * Returns the duration with the most recent 1 day data.
  * @async
- * @function getDailyAverageDuration
+ * @function getLatestDailyDurations
  * @returns {Promise<Array>} The average duration on a daily basis.
  */
-async function getDailyAverageDuration() {
-    const sql_query = `
-    SELECT date, AVG(duration) AS avg_duration
-    FROM cat_data
-    GROUP BY date
-    ORDER BY date
-    `;
+async function getLatestDailyDurations() {
+  const sql_query = `
+  SELECT entry, duration 
+  FROM cat_data 
+  WHERE DATE_TRUNC('day', date) = (SELECT DATE_TRUNC('day', date) as latest_date
+  FROM cat_data
+  ORDER BY date DESC LIMIT 1);
+  `;
 
-    const result = await pool.query(sql_query);
-    return result.rows;
-  }
+  const result = await pool.query(sql_query);
+  return result.rows;
+}
 
 
 /**
- * Returns the average duration on a weekly basis.
+ * Returns the daily average duration per visit with a week's data (modified on 20230321).
  * @async
  * @function getWeeklyAverageDuration
  * @returns {Promise<Array>} Returns the average duration on a weekly basis.
  */
 async function getWeeklyAverageDuration() {
   const sql_query = `
-  SELECT DATE_TRUNC('week', date) as week, AVG(duration) AS avg_duration
+  SELECT date, AVG(duration) AS avg_duration
   FROM cat_data
-  GROUP BY DATE_TRUNC('week', date)
-  ORDER BY DATE_TRUNC('week', date)
+  WHERE date >= (SELECT MAX(date) - INTERVAL '7' DAY FROM cat_data)   
+  GROUP BY date
+  ORDER BY date;
   `;
   const result = await pool.query(sql_query);
   return result.rows;
@@ -62,24 +82,25 @@ async function getWeeklyAverageDuration() {
 
 
 /**
- * Returns the average duration on a monthly basis.
+ * Returns the daily average duration per visit with a month's data (modified on 20230321).
  * @async
  * @function getMonthlyAverageDuration
  * @returns {Promise<Array>} Returns the average duration on a monthly basis.
  */
 async function getMonthlyAverageDuration() {
   const sql_query = `
-  SELECT DATE_TRUNC('month', date) as month, AVG(duration) AS avg_duration
+  SELECT date, AVG(duration) AS avg_duration
   FROM cat_data
-  GROUP BY DATE_TRUNC('month', date)
-  ORDER BY DATE_TRUNC('month', date)
+  WHERE date >= (SELECT MAX(date) - INTERVAL '30' DAY FROM cat_data) 
+  GROUP BY date
+  ORDER BY date;
   `;
   const result = await pool.query(sql_query);
   console.log(result.rows)
   return result.rows;
 }
 
-module.exports = {getDailyAverageDuration, getWeeklyAverageDuration, getMonthlyAverageDuration, getAllTimeAverageDuration}
+module.exports = {getLatestDailyDurations, getWeeklyAverageDuration, getMonthlyAverageDuration, getAllTimeAverageDuration}
 
 
 

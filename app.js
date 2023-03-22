@@ -10,8 +10,8 @@
 // Grab all the things we need
 //const { response } = require('express')
 const express = require('express')
-const { retrieveAvgDailyVisits, retrieveAvgWeeklyVisits, retrieveAvgMonthlyVisits } = require('./avgNumofVisits')
-const { getDailyAverageDuration, getWeeklyAverageDuration, getMonthlyAverageDuration, getAllTimeAverageDuration } = require('./avgDurationPerVisit')
+const { retrieveAvgNumDailyVisits, retrieveNumOfVisitsOneWeek, retrieveNumOfVisitsOneMonth, retrieveNumOfVisitsThreeMonth } = require('./avgNumofVisits')
+const { getLatestDailyDurations, getWeeklyAverageDuration, getMonthlyAverageDuration, getAllTimeAverageDuration } = require('./avgDurationPerVisit')
  
 // Configure our app
 const app = express()
@@ -19,37 +19,28 @@ const app = express()
 app.use(express.static('./public'))
 
 // 20230109: create a route to store the value of avg num of daily visits
-// 20230306: added async and await so that I don't have to use .then() method to resolve a promise (the returned value of retrieveAvgDailyVisits() is a promise)
+// 20230306: added async and await so that I don't have to use .then() method to resolve a promise (the returned value of retrieveDailyVisits() is a promise)
 app.get('/api/v1/avgDailyVisits', async(req, res) => {
 
    // 20230110: avg_daily_visits is [object promise], response is the actual value
   try {
-    const avg_daily_visits =  await retrieveAvgDailyVisits()
+    const avg_visits =  await retrieveAvgNumDailyVisits()
     // avg_daily_visits.then((response) => {
     //     res.status(200).send(response)
     // })
-    res.status(200).send(avg_daily_visits)
+    res.status(200).send(avg_visits)
   } catch (err){
     console.error('Error retrieving avg visits per day:', err.message);
     res.status(500).send('Internal Server Error');
   }
 })
 
-// 20230301: create a route to store the avg number of weekly visits
-app.get('/api/v1/avgWeeklyVisits', async(req, res) => {
-  try {
-    const avg_weekly_visits = await retrieveAvgWeeklyVisits()
-    res.status(200).send(avg_weekly_visits)
-  } catch (err){
-    console.error('Error retrieving avg visits per week:', err.message);
-    res.status(500).send('Internal Server Error');
-  }
- })
 
-// 20230301: create a route to store the avg visits per month
-app.get('/api/v1/avgMonthlyVisits', async(req, res) => {
+
+// 20230321: Added the following APIs from which data will be retrieved to plot graphs for the Web APP, replacing Metabase graphs
+app.get('/api/v1/NumOfVisitsOneWeek', async(req, res) => {
   try {
-    const avg_monthly_visits = await retrieveAvgMonthlyVisits()
+    const avg_monthly_visits = await retrieveNumOfVisitsOneWeek()
     res.status(200).send(avg_monthly_visits)
   } catch (err){
     console.error('Error retrieving avg visits per month:', err.message);
@@ -57,6 +48,25 @@ app.get('/api/v1/avgMonthlyVisits', async(req, res) => {
   }
  })
 
+ app.get('/api/v1/NumOfVisitsOneMonth', async(req, res) => {
+  try {
+    const avg_monthly_visits = await retrieveNumOfVisitsOneMonth()
+    res.status(200).send(avg_monthly_visits)
+  } catch (err){
+    console.error('Error retrieving avg visits per month:', err.message);
+    res.status(500).send('Internal Server Error');
+  }
+ })
+
+ app.get('/api/v1/NumOfVisitsThreeMonth', async(req, res) => {
+  try {
+    const avg_monthly_visits = await retrieveNumOfVisitsThreeMonth()
+    res.status(200).send(avg_monthly_visits)
+  } catch (err){
+    console.error('Error retrieving avg visits per month:', err.message);
+    res.status(500).send('Internal Server Error');
+  }
+ })
 
 // 20230307: Create a route to store average time per bathroom visit based on all time data
 app.get('/api/v1/avgTimePerVisitAllTime', async(req, res) => {
@@ -71,10 +81,10 @@ app.get('/api/v1/avgTimePerVisitAllTime', async(req, res) => {
 });
 
 
-app.get('/api/v1//avgTimePerVisitDaily', async (req, res) => {
+app.get('/api/v1/TimePerVisitLatestDaily', async (req, res) => {
  try {
-   const avgTimePerVisitDailyData = await getDailyAverageDuration();
-   res.status(200).send(avgTimePerVisitDailyData)
+   const timePerVisitLatestDailyData = await getLatestDailyDurations();
+   res.status(200).send(timePerVisitLatestDailyData)
  } catch (err) {
    console.error('Error retrieving average time per visit on a daily basis:', err.message);
    res.status(500).send('Internal Server Error');

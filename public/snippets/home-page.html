@@ -11,9 +11,14 @@
         <!-- Use grid system for the two buttons -->
         <div class="row">
             <div class="col-md-6">
-                <button class="btn btn-primary btn-lg bg-success text-white border-light"><span class="fs-7">Everything
-                        looks
-                        great!</span></button>
+                <!-- 20230322: Changed to badge from button-->
+                <h3> 
+                    <scan id="health-indicator-more-developing-later" class="badge bg-success text-white border-light fs-7" >Everything looks great!</scan>
+                </h3>
+                <!-- <button class="btn btn-primary btn-lg bg-success text-white border-light">
+                    <span class="fs-7">Everything looks great!</span>
+                </button> -->
+                
             </div>
             <!-- <div class="col-md-6">
                 <button class="btn btn-primary btn-lg bg-warning text-dark border-light"><span class="fs-6">We've
@@ -41,48 +46,41 @@
                 <!-- The value of the attribute `for` should match the value of `id`-->
                 <!-- `name` attribute is used to group related radio buttons together.-->
                 <input type="radio" class="btn-check" name="options-outlined" id="day-visit" autocomplete="off" checked>
-                <label class="btn btn-outline-primary" for="day-visit" onclick="catData.loadDailyVisits(); ">Day</label>
+                <label class="btn btn-outline-primary" for="day-visit" onclick="catData.loadDailyVisitsGraph(); ">1-Week</label>
 
                 <input type="radio" class="btn-check" name="options-outlined" id="week-visit" autocomplete="off">
-                <label class="btn btn-outline-primary" for="week-visit" onclick="catData.loadWeeklyVisits();">Week</label>
+                <label class="btn btn-outline-primary" for="week-visit" onclick="catData.loadWeeklyVisitsGraph();">1-Month</label>
 
                 <input type="radio" class="btn-check" name="options-outlined" id="month-visit" autocomplete="off">
                 <label class="btn btn-outline-primary" for="month-visit"
-                    onclick="catData.loadMonthlyVisits();">Month</label>
+                    onclick="catData.loadThreeMonthVisitsGraph();">3-Month</label>
             </div>
 
             <div id="visit-graph" class="container">
-                <!-- Update dynamically with real graph created on metabase -->
-                <!-- 20230112: The following is the default daily graph. Radio buttons for week and month can be clicked for weekly and monthly graph-->
-                <!-- <iframe src="http://192.168.1.157/public/question/29d65c83-daae-4da9-9f26-f6c2ad45513f" frameborder="0"
-                    width="100%" height="600" allowtransparency></iframe> -->
+                <!-- Radio buttons for week and month can be clicked for weekly and monthly graph-->
             </div>
         </div>
     </div>
     <div class="col-md-6">
         <div class="h-100 p-3 text-bg-dark border rounded-3">
-            <h5 class="text-center">Average Time Span per Visit</h5>
+            <h5 class="text-center">Average Time Spent Per Visit</h5>
             <p class="text-center"> <scan id="avgTimePerVisit" class="badge bg-secondary" style="width: 50px; height: 20px;"></scan> seconds</p>
             <!-- pb: padding bottom -->
             <div class="d-flex justify-content-between pb-3">
                 <!-- 20230306: Changed these buttons to radio toggle buttons -->
                 <input type="radio" class="btn-check" name="options-outlined-timespan" id="day-timespan" autocomplete="off" checked>
-                <label class="btn btn-outline-light" for="day-timespan" onclick="catData.loadDailyAvgTimePerVisit();">Day</label>
+                <label class="btn btn-outline-light" for="day-timespan" onclick="catData.loadLatestDailyTimePerVisit();">1-Day</label>
 
                 <input type="radio" class="btn-check" name="options-outlined-timespan" id="week-timespan" autocomplete="off">
-                <label class="btn btn-outline-light" for="week-timespan" onclick="catData.loadWeeklyAvgTimePerVisit();">Week</label>
+                <label class="btn btn-outline-light" for="week-timespan" onclick="catData.loadWeeklyAvgTimePerVisit();">1-Week</label>
 
                 <input type="radio" class="btn-check" name="options-outlined-timespan" id="month-timespan" autocomplete="off">
                 <label class="btn btn-outline-light" for="month-timespan"
-                    onclick="catData.loadMonthlyAvgTimePerVisit();">Month</label>
+                    onclick="catData.loadMonthlyAvgTimePerVisit();">1-Month</label>
 
-                <!-- <button class="btn btn-outline-light" type="button">Day</button>
-                <button class="btn btn-outline-light" type="button">Week</button>
-                <button class="btn btn-outline-light" type="button">Month</button> -->
             </div>
             <div id="TimeSpan-graph" class="container">
                 <!-- 20221107: the graph here is dependent on our data-->
-                <!-- <img class="p-4" src="images/sample-bar-graph.jpg" alt="" width="100%"> -->
             </div>
         </div>
     </div>

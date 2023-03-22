@@ -26,17 +26,6 @@ body {
   color:deeppink;
 }
 
-/** HEADER **/
-/* #header-nav {
-  background-color: gold;
-  border-radius: 0;
-  border: 0;
-} */
-
-/* Project logo & name wrapper */
-/* .navbar-brand {
-  padding-top: 15px;
-} */
 
 #logo-img {
   background: url('../images/logo-img-medium.jpg') no-repeat;
@@ -45,54 +34,16 @@ body {
   margin: 5px 5px 5px 0;
 }
 
+/* 20230322: Shift the graph a bit left ( add some left margin to its parent element). */
+#visit-graph {
+  margin-left: -10px;
+}
+
 /* 20230307: Shift the graph a bit left ( add some left margin to its parent element). */
 #TimeSpan-graph {
   margin-left: -10px;
 }
 
-/* Project name */
-/* #project-name {
-  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-  color: cornflowerblue;
-  font-size: 1.5em;
-  margin-top: 0;
-  margin-bottom: 0;
-  padding-left: 15px;
-  line-height: .75;
-} */
-
-/* No underline when hovering above the project name */
-/* .navbar-brand a:hover,
-.navbar-brand a:focus {
-  text-decoration: none;
-} */
-
-/* Nav Menu Button */
-/* #nav-list {
-  margin-top: 15px;
-} */
-
-/* #nav-list a {
-  color: pink;
-  text-align: center;
-  font-size: 1.5em;
-  padding-left: 25px;
-} */
-
-/* #nav-list a:hover {
-  background: #E7E7E7;
-} */
-
-/* .navbar-header button.navbar-toggle {
-
-  clear: both;
-  margin-top: -30px;
-} */
-
-/* .navbar-header button.navbar-toggle,
-.navbar-header .icon-bar {
-  border: 1px solid deeppink;
-} */
 
 /***************************************** XX Large devices only **************************************/
 @media (min-width:1400px) {

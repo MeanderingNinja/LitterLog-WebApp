@@ -13,12 +13,12 @@ const { pool } = require('./db');
  * Retrieves the average number of daily visits to the cat bathroom.
  * 
  * @async
- * @function retrieveAvgDailyVisits
+ * @function retrieveAvgNumDailyVisits
  * @param {object} req - The HTTP request object.
  * @param {object} res - The HTTP response object.
  * @returns {number} The average number of daily visits to the bathroom.
  */
-async function retrieveAvgDailyVisits(req, res) {
+async function retrieveAvgNumDailyVisits(req, res) {
     // SQL query to calculate the average daily visits
     sql_query = "SELECT COUNT(*)/COUNT(DISTINCT date) as avg_daily_visits FROM cat_data"
     try {
@@ -97,4 +97,86 @@ async function retrieveAvgMonthlyVisits(req, res) {
     }
 }
 
-module.exports = { retrieveAvgDailyVisits, retrieveAvgWeeklyVisits, retrieveAvgMonthlyVisits };
+//  20230321: Adding new functions to retrieve data for plotting the first graph in the Web APP (replacing Metabase graphs) 
+/**
+ * Retrieves the number of visits to the cat bathroom with a week's data
+ * 
+ * @async
+ * @function retrieveNumOfVisitsOneWeek
+ * @param {object} req - The HTTP request object.
+ * @param {object} res - The HTTP response object.
+ * @returns {Object[]} An array of objects, where each object contains a "date" field (the date of the entry) and a "num_entries" field (the number of entries for that date).
+ */
+async function retrieveNumOfVisitsOneWeek(req, res) {
+
+    sql_query = ` 
+    SELECT date, COUNT(*) as num_entries
+    FROM cat_data
+    WHERE date >= (SELECT MAX(date) - INTERVAL '7' DAY FROM cat_data)
+    GROUP BY date
+    ORDER BY date;
+    `;
+
+    try {
+        const queryResult = await pool.query(sql_query);
+        return queryResult.rows;
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+
+/**
+ * Retrieves the number of visits to the cat bathroom with a month's data
+ * 
+ * @async
+ * @function retrieveNumOfVisitsOneMonth
+ * @param {object} req - The HTTP request object.
+ * @param {object} res - The HTTP response object.
+ * @returns {Object[]} An array of objects, where each object contains a "date" field (the date of the entry) and a "num_entries" field (the number of entries for that date).
+ */
+async function retrieveNumOfVisitsOneMonth(req, res) {
+
+    sql_query = ` 
+    SELECT date, COUNT(*) as num_entries
+    FROM cat_data
+    WHERE date >= (SELECT MAX(date) - INTERVAL '30' DAY FROM cat_data)
+    GROUP BY date
+    ORDER BY date;
+    `;
+
+    try {
+        const queryResult = await pool.query(sql_query);
+        return queryResult.rows;
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+/**
+ * Retrieves the number of visits to the cat bathroom with three months' data
+ * 
+ * @async
+ * @function retrieveNumOfVisitsThreeMonth
+ * @param {object} req - The HTTP request object.
+ * @param {object} res - The HTTP response object.
+ * @returns {Object[]} An array of objects, where each object contains a "date" field (the date of the entry) and a "num_entries" field (the number of entries for that date).
+ */
+async function retrieveNumOfVisitsThreeMonth(req, res) {
+
+    sql_query = ` 
+    SELECT date, COUNT(*) as num_entries
+    FROM cat_data
+    WHERE date >= (SELECT MAX(date) - INTERVAL '90' DAY FROM cat_data)
+    GROUP BY date
+    ORDER BY date;
+    `;
+
+    try {
+        const queryResult = await pool.query(sql_query);
+        return queryResult.rows;
+    } catch (error) {
+        console.error(error);
+    }
+}
+module.exports = { retrieveAvgNumDailyVisits, retrieveNumOfVisitsOneWeek, retrieveNumOfVisitsOneMonth, retrieveNumOfVisitsThreeMonth};

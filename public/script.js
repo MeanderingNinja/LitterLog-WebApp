@@ -48,7 +48,7 @@ document.addEventListener("DOMContentLoaded", function () {
 let catData = {};
 // homeHtml to be inserted to #main-content 
 let homeHtml = "snippets/home-page.html";
-// 20230111: url that can be used to fetch the number of visits
+// 20230111: url that can be used to fetch the avg number of visits per day
 let retrieveAvgDailyVisits = "/api/v1/avgDailyVisits";
 
 // function to toggle between Home and About button 
@@ -75,10 +75,11 @@ catData.loadHomePage = function(){
 
 // Function to load data and graphs after the home page html snippet is loaded
 onHomePageLoad = function() {
-  // Load the daily visit graph and the avg number if daily visits
-  catData.loadDailyVisits();
+  // Load the daily visit graph and the avg number if daily visits 
+  catData.loadDailyVisitsGraph();
+  catData.loadAvgNumVisitsPerDay()
   // Inset graph to #TimeSpan-graph in home-page.html (Worked 20230303!)
-  catData.loadDailyAvgTimePerVisit();
+  catData.loadLatestDailyTimePerVisit();
   loadAvgTimePerVisitAllTime();
 }
 
@@ -95,48 +96,179 @@ catData.loadAboutPage = function(){
 // ************************** Dynamically load visit graphs and avg number of visits above the Day/Week/Month buttons *******************
 // **************** Functions below are call back functions for click events set up in home-page.html *************** 
 
- 
-// **** Function #1: Load the daily visit graph and the avg number if daily visits ****
-let daily_visit_graph_html = "snippets/daily_visit_graph.html";
-catData.loadDailyVisits = function () {
-    showLoading("#visit-graph");
-    // Insert the graph showing number of visits on a DAILY basis 
-    ajaxUtils.sendGetRequest(daily_visit_graph_html,
-        function (responseText) { insertHtml("#visit-graph", responseText) }, false);
-    // Get the avg num of dailyly visits and insert it to #avg-num-of-visits in home-page.html
-    ajaxUtils.sendGetRequest(retrieveAvgDailyVisits,
-        function (responseText) { insertHtml("#avg-num-of-visits", responseText) }, false);
-
-};
+// Function to Load the average number of visits per day to the space above the graph
+catData.loadAvgNumVisitsPerDay = function(){
+  // Get the avg num of dailyly visits and insert it to #avg-num-of-visits in home-page.html
+  ajaxUtils.sendGetRequest(retrieveAvgDailyVisits,
+      function (responseText) { insertHtml("#avg-num-of-visits", responseText) }, false);
+}
 
 
-// **** Function #2: Load the daily visit graph and avg visits per week ****
-let weekly_visit_graph_html = "snippets/weekly_visit_graph.html";
-// 20230111: url that can be used to fetch the avg number of weekly visits
-let retrieveAvgWeeklyVisits = "/api/v1/avgWeeklyVisits";
-catData.loadWeeklyVisits = function () {
-    showLoading("#visit-graph");
-    // Insert the graph showing number of visits on a WEEKLY basis 
-    ajaxUtils.sendGetRequest(weekly_visit_graph_html,
-        function (responseText) { insertHtml("#visit-graph", responseText) }, false);
-    // Get the avg num of weekly visits and insert it to #avg-num-of-visits in home-page.html
-    ajaxUtils.sendGetRequest(retrieveAvgWeeklyVisits,
-        function (responseText) { insertHtml("#avg-num-of-visits", responseText) }, false);
-};
+// **** Function #1: Load the daily visit graph with 1 week's data (Modified on 20230322) ****
+
+// let daily_visit_graph_html = "snippets/daily_visit_graph.html";
+// catData.loadDailyVisits = function () {
+//     showLoading("#visit-graph");
+//     // Insert the graph showing number of visits on a DAILY basis 
+//     ajaxUtils.sendGetRequest(daily_visit_graph_html,
+//         function (responseText) { insertHtml("#visit-graph", responseText) }, false);
+//     // Get the avg num of dailyly visits and insert it to #avg-num-of-visits in home-page.html
+//     ajaxUtils.sendGetRequest(retrieveAvgDailyVisits,
+//         function (responseText) { insertHtml("#avg-num-of-visits", responseText) }, false);
+
+// };
+
+let getNumOfVisitsOneWeek = "/api/v1/NumOfVisitsOneWeek"
+catData.loadDailyVisitsGraph = function () {
+  // showLoading("TimeSpan-graph");
+  ajaxUtils.sendGetRequest(getNumOfVisitsOneWeek, 
+    function(data){
+      //20230303: trying it out for the theme not work. Plotly.Plotly.register(PlotlyThemes);
+        const trace = {
+            x: data.map(row => row.date),
+            y: data.map(row => row.num_entries),
+            type: "scatter",
+            mode: "lines+markers",
+            marker: {color: "green"},
+            line: {color: "green"}
+          };
+
+        const layout = {
+          // title: "Number of Visits by Date",
+          title: '<span style="color:green">Number of Visits by Date</span>', 
+          // tickmode and ticvals are added to ensure that all dates are displayed on the x-axis
+          xaxis: {
+            type:"date", 
+            tickformat: '%Y-%m-%d', 
+            tickangle: -50, 
+            tickmode: "array", 
+            tickvals: data.map(row => row.date),
+            // tickfont property is used to set the color of the tick labels on the x-axis 
+            tickfont: {color:"green"}
+          },
+          yaxis: {
+            title: '<span style="color:green">Number of Visits</span>',
+            tickfont: {color:"green"}
+          }
+        }
+
+        // Plotly has to be captialized here to work 
+        Plotly.newPlot("visit-graph", [trace], layout, {responsive: true}, function (err, msg) {
+          if (err) {
+            console.error(err);
+          } else {
+            console.log(msg);
+          }
+        });
+    }, 
+    true); // true instead of false here
+}
+
+
+// **** Function #2: Load the daily visit graph with 1 month's data ****
+
+
+let getNumOfVisitsOneMonth = "/api/v1/NumOfVisitsOneMonth"
+catData.loadWeeklyVisitsGraph = function () {
+  // showLoading("TimeSpan-graph");
+  ajaxUtils.sendGetRequest(getNumOfVisitsOneMonth, 
+    function(data){
+      //20230303: trying it out for the theme not work. Plotly.Plotly.register(PlotlyThemes);
+        const trace = {
+            x: data.map(row => row.date),
+            y: data.map(row => row.num_entries),
+            type: "scatter",
+            mode: "lines+markers",
+            marker: {color: "green"},
+            line: {color: "green"}
+          };
+
+        const layout = {
+          // title: "Number of Visits by Date",
+          title: '<span style="color:green">Number of Visits by Date</span>', 
+          // tickmode and ticvals are added to ensure that all dates are displayed on the x-axis
+          xaxis: {
+            type:"date", 
+            tickformat: '%Y-%m-%d', 
+            tickangle: -50, 
+            tickmode: "array", 
+            tickvals: data.
+            filter((row, i) => i % 2 === 0) // filter every other row, 
+            .map((row) => row.date),
+            // tickfont property is used to set the color of the tick labels on the x-axis 
+            tickfont: {color:"green"}
+          },
+          yaxis: {
+            title: '<span style="color:green">Number of Visits</span>',
+            tickfont: {color:"green"}
+          }
+        }
+
+        // Plotly has to be captialized here to work 
+        Plotly.newPlot("visit-graph", [trace], layout, {responsive: true}, function (err, msg) {
+          if (err) {
+            console.error(err);
+          } else {
+            console.log(msg);
+          }
+        });
+    }, 
+    true); // true instead of false here
+}
+
 
 
 // **** Function #3: Load the monthly visit graph and avg visits per month ****
-let monthly_visit_graph_html = "snippets/monthly_visit_graph.html";
-// 20230111: url that can be used to fetch the avg number of monthly visits
-let retrieveAvgMonthlyVisits = "/api/v1/avgMonthlyVisits";
-catData.loadMonthlyVisits = function () {
-    showLoading("#visit-graph");
-    ajaxUtils.sendGetRequest(monthly_visit_graph_html,
-        function (responseText) { insertHtml("#visit-graph", responseText) }, false);
-    // Get the avg visits per month and insert it to #avg-num-of-visits in home-page.html
-    ajaxUtils.sendGetRequest(retrieveAvgMonthlyVisits,
-        function (responseText) { insertHtml("#avg-num-of-visits", responseText) }, false);
-};
+
+let getNumOfVisitsThreeMonth = "/api/v1/NumOfVisitsThreeMonth"
+catData.loadThreeMonthVisitsGraph = function () {
+  // showLoading("TimeSpan-graph");
+  ajaxUtils.sendGetRequest(getNumOfVisitsThreeMonth, 
+    function(data){
+      //20230303: trying it out for the theme not work. Plotly.Plotly.register(PlotlyThemes);
+        const trace = {
+            x: data.map(row => row.date),
+            y: data.map(row => row.num_entries),
+            type: "scatter",
+            mode: "lines+markers",
+            marker: {color: "green"},
+            line: {color: "green"}
+          };
+
+        const layout = {
+          // title: "Number of Visits by Date",
+          title: '<span style="color:green">Number of Visits by Date</span>', 
+          // tickmode and ticvals are added to ensure that all dates are displayed on the x-axis
+          xaxis: {
+            type:"date", 
+            tickformat: '%Y-%m-%d', 
+            tickangle: -50, 
+            tickmode: "array", 
+            tickvals: data.
+            filter((row, i) => i % 5 === 0) // filter every 5 rows, 
+            .map((row) => row.date),
+            // tickfont property is used to set the color of the tick labels on the x-axis 
+            tickfont: {color:"green"}
+          },
+          yaxis: {
+            title: '<span style="color:green">Number of Visits</span>',
+            tickfont: {color:"green"}
+          }
+        }
+
+        // Plotly has to be captialized here to work 
+        Plotly.newPlot("visit-graph", [trace], layout, {responsive: true}, function (err, msg) {
+          if (err) {
+            console.error(err);
+          } else {
+            console.log(msg);
+          }
+        });
+    }, 
+    true); // true instead of false here
+}
+
+
 
 // 20230306: function to insert the all time avg time per vist to #avgTimePerVisitAllTime in home-page.html. 
 let avgTimePerVisit = '/api/v1/avgTimePerVisitAllTime'
@@ -153,27 +285,29 @@ loadAvgTimePerVisitAllTime = function() {
 
 
 
-// Function #1: Inset graph to #TimeSpan-graph in home-page.html
+//  **** Function #1: Inset graph to #TimeSpan-graph in home-page.html  **** 
 // 20230303:
-let getAvgTimePerVisitDaily = "/api/v1//avgTimePerVisitDaily"
-catData.loadDailyAvgTimePerVisit = function () {
+let getTimePerVisitLatestDaily = "/api/v1/TimePerVisitLatestDaily"
+catData.loadLatestDailyTimePerVisit = function () {
   // showLoading("TimeSpan-graph");
-  ajaxUtils.sendGetRequest(getAvgTimePerVisitDaily, 
+  ajaxUtils.sendGetRequest(getTimePerVisitLatestDaily, 
     function(data){
       //20230303: trying it out for the theme not work. Plotly.Plotly.register(PlotlyThemes);
         const trace = {
-            x: data.map(row => row.date),
-            y: data.map(row => row.avg_duration),
-            type: "scatter",
-            mode: "lines+markers",
-            marker: {color: "blue"},
-            line: {color: "blue"}
+          //20230320: the returned row.entry is a ISO-8601 date representation UTC=> ("2023-03-20T02:19:20.691Z"), I need to parse it using new Date() 
+          // 20230321: The new Date(row.entry) creates a Date object from the row.entry value, and the toLocaleTimeString method formats the date as a string with the local time component.
+            x: data.map(row => new Date(row.entry).toLocaleTimeString()),
+            y: data.map(row => row.duration),
+            type: "bar",
+            mode: "markers",
+            marker: {color: "dark pink", width: 0.5},
+            //line: {color: "blue"}
           };
 
         const layout = {
-          title: "Daily Average Time per Visit",
-          xaxis: {title: "Date"},
-          yaxis: {title: "Average Time (s)"}
+          title: "Time Spent Per Visit",
+          xaxis: {title: new Date(data[0].entry).toLocaleDateString(), tickformat: "%H:%M:%S", tickmode: "linear", tick0:"00:00:00", dtick: 3600000, range:["00:00:00.000Z", "23:59:59.999Z"]}, // 
+          yaxis: {title: "Time (s)"}
         }
         // 20230306: file name in graphOptions specifies the name of the file that will be created when the plot is saved.  
         // The plot will be saved to your plotly account (I have to import plotly with username like this: const plotly = require('plotly')('username', 'apikey');)
@@ -197,8 +331,8 @@ catData.loadDailyAvgTimePerVisit = function () {
 }
 
 
-// Function #2: Inset graph to #TimeSpan-graph in home-page.html
-// 20230303: Work in progress
+//  **** Function #2: Inset graph to #TimeSpan-graph in home-page.html **** 
+
 let getAvgTimePerVisitWeekly = "/api/v1//avgTimePerVisitWeekly"
 catData.loadWeeklyAvgTimePerVisit = function () {
   // showLoading("TimeSpan-graph");
@@ -206,18 +340,19 @@ catData.loadWeeklyAvgTimePerVisit = function () {
     function(data){
       //20230303: trying it out for the theme not work. Plotly.Plotly.register(PlotlyThemes);
         const trace = {
-            x: data.map(row => row.week),
+            x: data.map(row => row.date),
             y: data.map(row => row.avg_duration),
-            type: "scatter",
+            type: "bar",
             mode: "lines+markers",
-            marker: {color: "blue"},
+            marker: {color: "dark pink"},
             line: {color: "blue"}
           };
 
         const layout = {
-          title: "Weekly Average Time per Visit",
-          xaxis: {title: "Date"},
-          yaxis: {title: "Average Time"}
+          title: "Average Time Spent Per Visit By Date",
+          // tickmode and ticvals are added to ensure that all dates are displayed on the x-axis
+          xaxis: {type:"date", tickformat: '%Y-%m-%d', tickangle: -50, tickmode: "array", tickvals: data.map(row => row.date)},
+          yaxis: {title: "Average Time (s)"}
         }
 
         // Plotly has to be captialized here to work 
@@ -233,7 +368,7 @@ catData.loadWeeklyAvgTimePerVisit = function () {
 }
 
 
-// Function #3: Inset graph to #TimeSpan-graph in home-page.html
+//  **** Function #3: Inset graph to #TimeSpan-graph in home-page.html **** 
 // 20230303: 
 let getAvgTimePerVisitMonthly = "/api/v1//avgTimePerVisitMonthly"
 catData.loadMonthlyAvgTimePerVisit = function () {
@@ -242,18 +377,26 @@ catData.loadMonthlyAvgTimePerVisit = function () {
     function(data){
       //20230303: trying it out for the theme not work. Plotly.Plotly.register(PlotlyThemes);
         const trace = {
-            x: data.map(row => row.month),
+            x: data.map(row => row.date),
             y: data.map(row => row.avg_duration),
-            type: "scatter",
+            type: "bar",
             mode: "lines+markers",
-            marker: {color: "blue"},
+            marker: {color: "dark pink"},
             line: {color: "blue"}
           };
 
         const layout = {
-          title: "Monthly Average Time per Visit",
-          xaxis: {title: "Date"},
-          yaxis: {title: "Average Time"}
+          title: "Average Time Spent Per Visit By Date",
+          xaxis: {
+            type:"date", 
+            tickformat: '%Y-%m-%d', 
+            tickangle: -50, 
+            tickmode: "array", 
+            tickvals: data.
+            filter((row, i) => i % 2 === 0) // filter every other row, 
+            .map((row) => row.date)
+          },
+          yaxis: {title: "Average Time (s)"}
         }
 
         // Plotly has to be captialized here to work 
