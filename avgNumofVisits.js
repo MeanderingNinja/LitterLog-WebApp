@@ -7,7 +7,10 @@
 
 // connect to the database and then run SQL query. 
 const { pool } = require('./db');
-
+// Load environment variables from .env file
+require('dotenv').config(); 
+schema = process.env.SCHEMA_NAME
+table = process.env.TABLE_NAME
 
 /**
  * Retrieves the average number of daily visits to the cat bathroom.
@@ -19,8 +22,10 @@ const { pool } = require('./db');
  * @returns {number} The average number of daily visits to the bathroom.
  */
 async function retrieveAvgNumDailyVisits(req, res) {
+
     // SQL query to calculate the average daily visits
-    sql_query = "SELECT COUNT(*)/COUNT(DISTINCT date) as avg_daily_visits FROM cat_data"
+    sql_query = `SELECT COUNT(*)/COUNT(DISTINCT date) as avg_daily_visits FROM ${schema}.${table}`
+    //sql_query = "SELECT COUNT(*)/COUNT(DISTINCT date) as avg_daily_visits FROM cat_data;"
     try {
         // `queryResult` is the returned object
         const queryResult = await pool.query(sql_query); 
@@ -53,7 +58,7 @@ async function retrieveAvgWeeklyVisits(req, res) {
     SELECT ROUND(AVG(visits_per_week), 2) AS avg_visits_per_week 
     FROM ( 
       SELECT COUNT(*) AS visits_per_week 
-      FROM cat_data 
+      FROM ${schema}.${table} 
       GROUP BY DATE_TRUNC('week', date) 
     ) AS weekly_visits; 
     `;
@@ -83,7 +88,7 @@ async function retrieveAvgMonthlyVisits(req, res) {
     SELECT ROUND(AVG(visits_per_month), 2) AS avg_visits_per_month 
     FROM ( 
       SELECT COUNT(*) AS visits_per_month 
-      FROM cat_data 
+      FROM ${schema}.${table} 
       GROUP BY DATE_TRUNC('month', date) 
     ) AS month_visits; 
     `;
@@ -97,7 +102,7 @@ async function retrieveAvgMonthlyVisits(req, res) {
     }
 }
 
-//  20230321: Adding new functions to retrieve data for plotting the first graph in the Web APP (replacing Metabase graphs) 
+// New functions to retrieve data for plotting the first graph in the Web APP (replacing Metabase graphs) 
 /**
  * Retrieves the number of visits to the cat bathroom with a week's data
  * 
@@ -111,7 +116,7 @@ async function retrieveNumOfVisitsOneWeek(req, res) {
 
     sql_query = ` 
     SELECT date, COUNT(*) as num_entries
-    FROM cat_data
+    FROM ${schema}.${table}
     WHERE date >= (SELECT MAX(date) - INTERVAL '7' DAY FROM cat_data)
     GROUP BY date
     ORDER BY date;
@@ -139,7 +144,7 @@ async function retrieveNumOfVisitsOneMonth(req, res) {
 
     sql_query = ` 
     SELECT date, COUNT(*) as num_entries
-    FROM cat_data
+    FROM ${schema}.${table}
     WHERE date >= (SELECT MAX(date) - INTERVAL '30' DAY FROM cat_data)
     GROUP BY date
     ORDER BY date;
@@ -166,7 +171,7 @@ async function retrieveNumOfVisitsThreeMonth(req, res) {
 
     sql_query = ` 
     SELECT date, COUNT(*) as num_entries
-    FROM cat_data
+    FROM ${schema}.${table}
     WHERE date >= (SELECT MAX(date) - INTERVAL '90' DAY FROM cat_data)
     GROUP BY date
     ORDER BY date;
