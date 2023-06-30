@@ -5,10 +5,11 @@
 This web app is part of [the LitterLog Project](https://github.com/emma-jinger/Cat_Bathroom_Monitoring_System) I've been working on. It displays the timestamps data corresponding to instances of a cat using the litterbox in the form of graphs and numbers. Specifically, on the web app, you can find:
 
 - the profile of our family cat - Atticus
-- the average number of bathroom visits on a daily, weekly, and monthly basis
+- the average number of daily bathroom visits
 - the average time Atticus spent per bathroom visit 
-- the graph that shows the number of bathroom visits on a daily, weekly, and monthly basis
-- the graph that shows the average time Atticus spent per bathroom visit on a daily, weekly, and monthly basis
+- the graphs that show the number of daily bathroom visits over the course of one week, one month, and three months respectively
+- the graph that shows the time Atticus spent per bathroom visit on the most recently recorded date
+- the graphs that show the average time Atticus spent per bathroom visit on a daily basis over the period of a week and a month repectively
 - an About page that tells the story of the project and the author
 
 ![cat_data_graphs_on_web_app](https://github.com/emma-jinger/LitterLog-WebApp/blob/version-1.0.1/public/images/sample_graph20230629.png)
