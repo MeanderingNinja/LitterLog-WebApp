@@ -2,16 +2,17 @@
 ![web-app-header-image](https://github.com/emma-jinger/cat_bathroom_monitoring_system_web_app/blob/main/public/images/web-app-header-img.png) 
 
 ## Introduction
-This web app is part of [the Cat Bathroom Monitoring System Project](https://github.com/emma-jinger/Cat_Bathroom_Monitoring_System) I've been working on. It displays the timestamps data corresponding to instances of a cat using the litterbox in the form of graphs and numbers. Specifically, on the web app, you can find:
+This web app is part of [the LitterLog Project](https://github.com/emma-jinger/Cat_Bathroom_Monitoring_System) I've been working on. It displays the timestamps data corresponding to instances of a cat using the litterbox in the form of graphs and numbers. Specifically, on the web app, you can find:
 
 - the profile of our family cat - Atticus
-- the average number of bathroom visits on a daily, weekly, and monthly basis
+- the average number of daily bathroom visits
 - the average time Atticus spent per bathroom visit 
-- the graph that shows the number of bathroom visits on a daily, weekly, and monthly basis
-- the graph that shows the average time Atticus spent per bathroom visit on a daily, weekly, and monthly basis
+- the graphs that show the number of daily bathroom visits over the course of one week, one month, and three months respectively
+- the graph that shows the time Atticus spent per bathroom visit on the most recently recorded date
+- the graphs that show the average time Atticus spent per bathroom visit on a daily basis over the period of a week and a month repectively
 - an About page that tells the story of the project and the author
 
-![cat_data_graphs_on_web_app](https://github.com/emma-jinger/cat_bathroom_monitoring_system_web_app/blob/main/public/images/cat_data_graphs_sample.png)
+![cat_data_graphs_on_web_app](https://github.com/emma-jinger/LitterLog-WebApp/blob/version-1.0.1/public/images/sample_graph20230629.png)
 
 ## Installation
 
@@ -23,10 +24,10 @@ sudo apt install git nodejs npm
 ```
 *Note: for reference, the node.js version I'm using is v16.3.0 and the npm version is 7.15.1.*
 
-Then clone the `cat_bathroom_monitoring_system_web_app` project:
+Then clone the `LitterLog-WebApp` project:
 ```
-git clone https://github.com/emma-jinger/cat_bathroom_monitoring_system_web_app
-cd cat_bathroom_monitoring_system_web_app
+git clone https://github.com/emma-jinger/LitterLog-WebApp
+cd LitterLog-WebApp
 ```
 
 ### Install dependencies:

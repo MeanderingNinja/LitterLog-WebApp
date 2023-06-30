@@ -1,33 +1,26 @@
 /** 
- * 20230228: This is a Node.js server side JavaScript file that uses Expres.js framework. 
+ * This is a Node.js server side JavaScript file that uses Expres.js framework. 
  * It initializes an instance of the Express app, serves static files from a public directory, 
- * and creates routes for retrieving average daily, weekly, and monthly visits. 
- * Additionally, it creates routes for retrieving average time per bathroom visit based on all-time data, as well as daily, weekly, and monthly averages.
+ * and creates routes for retrieving average daily visits and daily visits data for the period of a week, a month, and three months. 
+ * Additionally, it creates routes for retrieving average time per bathroom visit based on all-time data, 
+ * as well as weekly, and monthly data. 
  * Finally, it starts a node server listening on port 5001.
  * It must be initiated on the server before having any effect (use node app.js in the command line to initiate it.)
  */
 
-// Grab all the things we need
-//const { response } = require('express')
 const express = require('express')
-const { retrieveAvgNumDailyVisits, retrieveNumOfVisitsOneWeek, retrieveNumOfVisitsOneMonth, retrieveNumOfVisitsThreeMonth } = require('./avgNumofVisits')
-const { getLatestDailyDurations, getWeeklyAverageDuration, getMonthlyAverageDuration, getAllTimeAverageDuration } = require('./avgDurationPerVisit')
+const { retrieveAvgNumDailyVisits, retrieveNumOfVisitsOneWeek, retrieveNumOfVisitsOneMonth, retrieveNumOfVisitsThreeMonth } = require('./numofVisits')
+const { getLatestDailyDurations, getWeeklyAverageDuration, getMonthlyAverageDuration, getAllTimeAverageDuration } = require('./durationPerVisit')
  
 // Configure our app
 const app = express()
-// 20230228: use() method: add middleware that serves static files from the "public" directory
+// use(): add middleware that serves static files from the "public" directory
 app.use(express.static('./public'))
 
-// 20230109: create a route to store the value of avg num of daily visits
-// 20230306: added async and await so that I don't have to use .then() method to resolve a promise (the returned value of retrieveDailyVisits() is a promise)
+// Create a route to store the value of the average number of daily visits
 app.get('/api/v1/avgDailyVisits', async(req, res) => {
-
-   // 20230110: avg_daily_visits is [object promise], response is the actual value
   try {
     const avg_visits =  await retrieveAvgNumDailyVisits()
-    // avg_daily_visits.then((response) => {
-    //     res.status(200).send(response)
-    // })
     res.status(200).send(avg_visits)
   } catch (err){
     console.error('Error retrieving avg visits per day:', err.message);
@@ -36,12 +29,11 @@ app.get('/api/v1/avgDailyVisits', async(req, res) => {
 })
 
 
-
-// 20230321: Added the following APIs from which data will be retrieved to plot graphs for the Web APP, replacing Metabase graphs
+// Added the following APIs for data that will be used to plot graphs
 app.get('/api/v1/NumOfVisitsOneWeek', async(req, res) => {
   try {
-    const avg_monthly_visits = await retrieveNumOfVisitsOneWeek()
-    res.status(200).send(avg_monthly_visits)
+    const dailyVisitsOneWeek = await retrieveNumOfVisitsOneWeek()
+    res.status(200).send(dailyVisitsOneWeek)
   } catch (err){
     console.error('Error retrieving avg visits per month:', err.message);
     res.status(500).send('Internal Server Error');
@@ -50,8 +42,8 @@ app.get('/api/v1/NumOfVisitsOneWeek', async(req, res) => {
 
  app.get('/api/v1/NumOfVisitsOneMonth', async(req, res) => {
   try {
-    const avg_monthly_visits = await retrieveNumOfVisitsOneMonth()
-    res.status(200).send(avg_monthly_visits)
+    const dailyVisitsOneMonth = await retrieveNumOfVisitsOneMonth()
+    res.status(200).send(dailyVisitsOneMonth)
   } catch (err){
     console.error('Error retrieving avg visits per month:', err.message);
     res.status(500).send('Internal Server Error');
@@ -60,15 +52,15 @@ app.get('/api/v1/NumOfVisitsOneWeek', async(req, res) => {
 
  app.get('/api/v1/NumOfVisitsThreeMonth', async(req, res) => {
   try {
-    const avg_monthly_visits = await retrieveNumOfVisitsThreeMonth()
-    res.status(200).send(avg_monthly_visits)
+    const dailyVisitsThreeMonths = await retrieveNumOfVisitsThreeMonth()
+    res.status(200).send(dailyVisitsThreeMonths)
   } catch (err){
     console.error('Error retrieving avg visits per month:', err.message);
     res.status(500).send('Internal Server Error');
   }
  })
 
-// 20230307: Create a route to store average time per bathroom visit based on all time data
+// Create a route to store average time per bathroom visit based on all time data
 app.get('/api/v1/avgTimePerVisitAllTime', async(req, res) => {
  try {
    const avgTimePerVisit = await getAllTimeAverageDuration();
@@ -110,21 +102,6 @@ app.get('/api/v1//avgTimePerVisitMonthly', async (req, res) => {
    res.status(500).send('Internal Server Error');
  }
 });
-
-// app.get('/api/v1//avgTimePerVisitDaily', async (req, res) => {
-//    try {
-//      const data = await getDailyAverageDuration();
-//      const chartImage = await createChart(data);
-//      res.writeHead(200, {
-//        'Content-Type': 'image/png',
-//        'Content-Length': chartImage.length
-//      });
-//      res.end(chartImage);
-//    } catch (err) {
-//      console.error(err);
-//      res.status(500).send('Internal Server Error');
-//    }
-//  });
   
  
 // Start our node server 

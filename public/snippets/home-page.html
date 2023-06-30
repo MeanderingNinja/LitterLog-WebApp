@@ -13,7 +13,7 @@
             <div class="col-md-6">
                 <!-- 20230322: Changed to badge from button-->
                 <h3> 
-                    <scan id="health-indicator-more-developing-later" class="badge bg-success text-white border-light fs-7" >Everything looks great!</scan>
+                    <span id="health-indicator-more-developing-later" class="badge bg-success text-white border-light fs-7" >Everything looks great!</span>
                 </h3>
                 <!-- <button class="btn btn-primary btn-lg bg-success text-white border-light">
                     <span class="fs-7">Everything looks great!</span>
@@ -23,7 +23,7 @@
             <!-- <div class="col-md-6">
                 <button class="btn btn-primary btn-lg bg-warning text-dark border-light"><span class="fs-6">We've
                         detected an
-                        anormaly!</span>
+                        anomaly!</span>
                 </button>
             </div> -->
         </div>
@@ -33,16 +33,17 @@
 <div class="row align-items-md-stretch mb-3">
     <div class="col-md-6">
         <div class="h-100 p-3 text-bg-light rounded-3">
-            <h5 class="text-center text">Average Number of Visits</h5>
-            <p class="text-center">
-                <!-- 20221130: This number depends on the cat_data in the postgres database -->
-                <scan id="avg-num-of-visits" class="badge bg-secondary" style="width: 50px; height: 20px;"></scan>
-                times 
-            </p>
+            <h6 class="text-center text">Average Number of Daily Visits: 
+                <span class="text-center">
+                    <!-- 20221130: This number depends on the cat data in the postgres database -->
+                    <span id="avg-num-of-visits" class="badge bg-secondary" style="width: 50px; height: 20px;"></span>
+                    times 
+                </span>
+            </h6>
             <!-- pd-3: padding on the bottom -->
             <div class="d-flex justify-content-between pb-3">
                 <!-- Radio toggle buttons https://getbootstrap.com/docs/5.2/forms/checks-radios/ -->
-                <!-- 20230231: multiple function calls are allowed for a click event. Simply separate the function calls with a semicolon  -->
+                <!-- Multiple function calls are allowed for a click event. Simply separate the function calls with a semicolon  -->
                 <!-- The value of the attribute `for` should match the value of `id`-->
                 <!-- `name` attribute is used to group related radio buttons together.-->
                 <input type="radio" class="btn-check" name="options-outlined" id="day-visit" autocomplete="off" checked>
@@ -63,8 +64,11 @@
     </div>
     <div class="col-md-6">
         <div class="h-100 p-3 text-bg-dark border rounded-3">
-            <h5 class="text-center">Average Time Spent Per Visit</h5>
-            <p class="text-center"> <scan id="avgTimePerVisit" class="badge bg-secondary" style="width: 50px; height: 20px;"></scan> seconds</p>
+            <h6 class="text-center">Average Time Spent Per Visit: 
+                <span class="text-center"> 
+                    <span id="avgTimePerVisit" class="badge bg-secondary" style="width: 50px; height: 20px;"></span> seconds
+                </span>
+            </h6>
             <!-- pb: padding bottom -->
             <div class="d-flex justify-content-between pb-3">
                 <!-- 20230306: Changed these buttons to radio toggle buttons -->
