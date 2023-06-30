@@ -3,7 +3,7 @@
 // Helper Function #1
 const insertHtml = function (selector, html) {
     let targetElem = document.querySelector(selector);
-    console.log("20230306: " + targetElem)
+    // console.log("20230306: " + targetElem)
     //innerHTML: sets the HTML markup contained within the element.
     targetElem.innerHTML = html;
 };
@@ -26,7 +26,7 @@ const showLoading = function (selector) {
 };
 
 
-// 20230308: Hide collapsed menu items when user clicks outside of menu area
+// Hide collapsed menu items when user clicks outside of menu area
 document.addEventListener("click", function(event){
   // Check if the clicked element is inside the menu or not, by using the contains method on the nav-list and navbarToggle elements.
   let isClickInsideNav = document.querySelector("#nav-list").contains(event.target);
@@ -78,7 +78,7 @@ onHomePageLoad = function() {
   // Load the daily visit graph and the avg number if daily visits 
   catData.loadDailyVisitsGraph();
   catData.loadAvgNumVisitsPerDay()
-  // Inset graph to #TimeSpan-graph in home-page.html (Worked 20230303!)
+  // Inset graph to #TimeSpan-graph in home-page.html
   catData.loadLatestDailyTimePerVisit();
   loadAvgTimePerVisitAllTime();
 }
@@ -286,18 +286,18 @@ loadAvgTimePerVisitAllTime = function() {
 
 
 //  **** Function #1: Inset graph to #TimeSpan-graph in home-page.html  **** 
-// 20230303:
 let getTimePerVisitLatestDaily = "/api/v1/TimePerVisitLatestDaily"
 catData.loadLatestDailyTimePerVisit = function () {
   // showLoading("TimeSpan-graph");
   ajaxUtils.sendGetRequest(getTimePerVisitLatestDaily, 
     function(data){
-      //20230303: trying it out for the theme not work. Plotly.Plotly.register(PlotlyThemes);
+        const xValues = data.map(row => new Date(row.entry).toLocaleTimeString())
+        const yValues = data.map(row => row.duration)
         const trace = {
-          //20230320: the returned row.entry is a ISO-8601 date representation UTC=> ("2023-03-20T02:19:20.691Z"), I need to parse it using new Date() 
-          // 20230321: The new Date(row.entry) creates a Date object from the row.entry value, and the toLocaleTimeString method formats the date as a string with the local time component.
-            x: data.map(row => new Date(row.entry).toLocaleTimeString()),
-            y: data.map(row => row.duration),
+          //The returned row.entry is a ISO-8601 date representation UTC=> ("2023-03-20T02:19:20.691Z"), I need to parse it using new Date() 
+          //The new Date(row.entry) creates a Date object from the row.entry value, and the toLocaleTimeString method formats the date as a string with the local time component.
+            x: xValues,
+            y: yValues,
             type: "bar",
             mode: "markers",
             marker: {color: "dark pink", width: 0.5},
@@ -306,19 +306,19 @@ catData.loadLatestDailyTimePerVisit = function () {
 
         const layout = {
           title: "Time Spent Per Visit",
-          xaxis: {title: new Date(data[0].entry).toLocaleDateString(), tickformat: "%H:%M:%S", tickmode: "linear", tick0:"00:00:00", dtick: 3600000, range:["00:00:00.000Z", "23:59:59.999Z"]}, // 
+          xaxis: {title: new Date(data[0].entry).toLocaleDateString(), tickvals:xValues, ticktext: xValues.map(time => time.toString())}, 
           yaxis: {title: "Time (s)"}
         }
         // 20230306: file name in graphOptions specifies the name of the file that will be created when the plot is saved.  
         // The plot will be saved to your plotly account (I have to import plotly with username like this: const plotly = require('plotly')('username', 'apikey');)
         // const graphOptions = {
         //   layout: layout,
-        //   filename: "daily-average-time",
+        //   filename: "daily-average-time-per-visit",
         //   fileopt: "overwrite"
         // };
 
         // Plotly has to be captialized here to work 
-        // 20230307: {responsive: true} makes sure that the graph is responsive to window resizing
+        // {responsive: true} makes sure that the graph is responsive to window resizing
         Plotly.newPlot("TimeSpan-graph", [trace], layout, {responsive: true}, function (err, msg) {
           if (err) {
             console.error(err);
@@ -369,13 +369,11 @@ catData.loadWeeklyAvgTimePerVisit = function () {
 
 
 //  **** Function #3: Inset graph to #TimeSpan-graph in home-page.html **** 
-// 20230303: 
 let getAvgTimePerVisitMonthly = "/api/v1//avgTimePerVisitMonthly"
 catData.loadMonthlyAvgTimePerVisit = function () {
   // showLoading("TimeSpan-graph");
   ajaxUtils.sendGetRequest(getAvgTimePerVisitMonthly, 
     function(data){
-      //20230303: trying it out for the theme not work. Plotly.Plotly.register(PlotlyThemes);
         const trace = {
             x: data.map(row => row.date),
             y: data.map(row => row.avg_duration),
@@ -392,9 +390,8 @@ catData.loadMonthlyAvgTimePerVisit = function () {
             tickformat: '%Y-%m-%d', 
             tickangle: -50, 
             tickmode: "array", 
-            tickvals: data.
-            filter((row, i) => i % 2 === 0) // filter every other row, 
-            .map((row) => row.date)
+            tickvals: data.map(row => row.date),
+            ticktext: data.map(row => new Date(row.date).toLocaleDateString())
           },
           yaxis: {title: "Average Time (s)"}
         }
@@ -408,7 +405,7 @@ catData.loadMonthlyAvgTimePerVisit = function () {
           }
         });
     }, 
-    true); // true instead of false here
+    true);
 }
 
 
